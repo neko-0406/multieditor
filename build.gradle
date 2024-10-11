@@ -14,19 +14,19 @@ repositories {
 }
 
 ext {
-    junitVersion = '5.10.2'
+    junitVersion = '5.10.3'
 }
 
 sourceCompatibility = '21'
 targetCompatibility = '21'
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
 application {
     mainModule = 'com.nekosuki.multieditor'
-    mainClass = 'com.nekosuki.multieditor.HelloApplication'
+    mainClass = 'com.nekosuki.multieditor.MainApp'
 }
 
 javafx {
@@ -39,11 +39,11 @@ dependencies {
     implementation('com.dlsc.formsfx:formsfx-core:11.6.0') {
         exclude(group: 'org.openjfx')
     }
-    implementation('net.synedra:validatorfx:0.5.0') {
+    implementation('net.synedra:validatorfx:0.5.1') {
         exclude(group: 'org.openjfx')
     }
     implementation('org.kordamp.ikonli:ikonli-javafx:12.3.1')
-    implementation('eu.hansolo:tilesfx:21.0.3') {
+    implementation('eu.hansolo:tilesfx:21.0.7') {
         exclude(group: 'org.openjfx')
     }
 

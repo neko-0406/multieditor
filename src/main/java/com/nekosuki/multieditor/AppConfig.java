@@ -1,2 +1,4 @@
-package com.nekosuki.multieditor;public class AppConfig {
+package com.nekosuki.multieditor;
+
+public class AppConfig {
 }
