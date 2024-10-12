@@ -1,9 +1,14 @@
 package com.nekosuki.multieditor;
 
-import javafx.scene.layout.GridPane;
+import com.nekosuki.multieditor.components.MenuBar;
+import com.nekosuki.multieditor.components.SideMenuBar;
 
-public class App extends GridPane {
+import javafx.scene.layout.BorderPane;
+
+public class App extends BorderPane {
     public App() {
         super();
+        this.setTop(new MenuBar());
+        this.setLeft(new SideMenuBar());
     }
 }

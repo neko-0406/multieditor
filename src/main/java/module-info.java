@@ -7,7 +7,6 @@ module com.nekosuki.multieditor {
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
-    requires org.kordamp.ikonli.javafx;
     requires eu.hansolo.tilesfx;
 
     opens com.nekosuki.multieditor to javafx.fxml;
