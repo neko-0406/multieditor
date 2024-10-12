@@ -1,0 +1,11 @@
+.side-menu-bar {
+    -fx-background-color: white
+}
+
+.side-menu-button {
+    -fx-background-color: white;
+    -fx-border-color: white;
+}
+.side-menu-button:hover {
+    -fx-background-color: #d3d3d3
+}

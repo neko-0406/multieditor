@@ -8,6 +8,7 @@ module com.nekosuki.multieditor {
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
     requires eu.hansolo.tilesfx;
+    requires org.fxmisc.richtext;
 
     opens com.nekosuki.multieditor to javafx.fxml;
     exports com.nekosuki.multieditor;

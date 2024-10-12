@@ -8,8 +8,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 
 public class SideMenuBar extends ToolBar {
+    private final String buttonClass;
+
     public SideMenuBar() {
         super();
+        this.getStyleClass().add("side-menu-bar");
+        buttonClass = "side-menu-button";
         this.setOrientation(Orientation.VERTICAL);
         this.getItems().addAll(
             setExplorerButton()
@@ -17,6 +21,10 @@ public class SideMenuBar extends ToolBar {
     }
 
     private Button setExplorerButton() {
-        return new Button(null, IconManager.getIcon(Icons.FILES));
+        Button button = new Button(null, IconManager.getIcon(Icons.FILES));
+        button.setMinHeight(32);
+        button.setMinWidth(32);
+        button.getStyleClass().add(buttonClass);
+        return button;
     }
 }
