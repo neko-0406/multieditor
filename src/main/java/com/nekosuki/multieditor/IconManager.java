@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.InputStream;
+import java.util.Objects;
 
 public class IconManager {
 
@@ -11,7 +12,7 @@ public class IconManager {
         ImageView imageView = new ImageView();
 
         try (InputStream in = MainApp.class.getResourceAsStream("icons/" + iconType.getIconName())) {
-            Image image = new Image(in);
+            Image image = new Image(Objects.requireNonNull(in));
             imageView.setImage(image);
             imageView.setFitWidth(32);
             imageView.setFitHeight(32);
