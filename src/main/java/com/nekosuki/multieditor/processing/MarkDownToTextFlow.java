@@ -17,7 +17,7 @@ public class MarkDownToTextFlow implements Runnable{
 
     @Override
     public void run() {
-        String[] lines = text.split("\n");
+        String[] lines = text.split("\r\n|\r|\n");
         ArrayList<Text> list = new ArrayList<>();
         for (String line : lines) {
             Text text = new Text(line);

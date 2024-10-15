@@ -2,8 +2,10 @@ package com.nekosuki.multieditor.components.tabs;
 
 import com.nekosuki.multieditor.processing.MarkDownToTextFlow;
 import javafx.animation.PauseTransition;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 import org.fxmisc.richtext.CodeArea;
@@ -17,8 +19,10 @@ public class MarkDownTab extends Tab {
         super();
         textFlow = new TextFlow();
         codeArea = new CodeArea();
+        AnchorPane anchorPane = new AnchorPane(textFlow);
+        ScrollPane scrollPane = new ScrollPane(anchorPane);
         SplitPane splitPane = new SplitPane();
-        splitPane.getItems().addAll(codeArea, textFlow);
+        splitPane.getItems().addAll(codeArea, scrollPane);
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         this.setContent(splitPane);
 
