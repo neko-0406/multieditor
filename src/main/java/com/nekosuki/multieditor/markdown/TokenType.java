@@ -31,4 +31,6 @@ public enum TokenType {
     IMAGES,
     //テーブル（表）
     TABLE,
+    // 斜体
+    ITALIC
 }
