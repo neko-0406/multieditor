@@ -15,6 +15,10 @@ public class Token {
         this.content = content;
     }
 
+    public static Token genRootToken() {
+        return new Token(0, null, TokenType.ROOT,State.NONE, "");
+    }
+
     public int getId() {
         return id;
     }

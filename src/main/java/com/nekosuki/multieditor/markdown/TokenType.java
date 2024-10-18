@@ -32,5 +32,7 @@ public enum TokenType {
     //テーブル（表）
     TABLE,
     // 斜体
-    ITALIC
+    ITALIC,
+    // ROOT Token
+    ROOT
 }
