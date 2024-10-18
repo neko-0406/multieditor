@@ -15,13 +15,6 @@ public class MarkDownLexer {
     private final Pattern inlineCodePattern = Pattern.compile("`([^`]+)`");
     private final Pattern codeBlockPattern = Pattern.compile("```[\\s\\S]*?```");
 
-    private final Stack<Token> elementTree = new Stack<>();
-
-    //Markdownテキスト→Token単位に分解 字句解析
-    public void convertMarkdownToTSL(String text){
-
-    }
-
     // それぞれのタイプのトークンを返すメソット
     public Token getHeadingElement(int id, Token parent, String content) {
         return new Token(id, parent, TokenType.HEADING, State.NONE, content);
