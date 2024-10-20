@@ -32,14 +32,32 @@ public class MarkDownParser {
 
 
         while (!editText.isEmpty()){
-            Matcher matcher = lexer.matchWithHeadingElement(editText);
+            Matcher headerMatcher = lexer.matchWithHeadingElement(editText);
+            Matcher listMatcher = lexer.matchWithListElement(editText);
+            Matcher condeblockMatcher = lexer.matchWithCodeBlockElement(editText);
+
             id++;
-            if (matcher.matches()) {
-                Token headerToken = lexer.getHeadingElement(id, parent, matcher.group(1));
+            // #から始まるヘッダー
+            if (headerMatcher.matches()) {
+                Token headerToken = lexer.getHeadingElement(id, parent, headerMatcher.group(1));
                 parent = headerToken;
                 elements.push(headerToken);
-                editText = editText.replace(matcher.group(1), "").trim();
-            } else {
+                editText = editText.replace(headerMatcher.group(1), "").trim();
+            }
+            // - or 1. で始まるリスト
+            else if (listMatcher.matches()) {
+                Token listToken = lexer.getListElement(id, parent, listMatcher.group(1));
+                parent = listToken;
+                elements.push(listToken);
+                editText = editText.replace(listMatcher.group(1), "").trim();
+            }
+            else if (condeblockMatcher.matches()) {
+                Token codeblockToken = lexer.getCodeBlockElement(id, parent, listMatcher.group(1));
+                parent = codeblockToken;
+                elements.push(codeblockToken);
+                editText = editText.replace(condeblockMatcher.group(1), "").trim();
+            }
+            else{
                 Token textToken = lexer.getTextElement(id, parent, editText);
                 parent = textToken;
                 elements.push(textToken);
