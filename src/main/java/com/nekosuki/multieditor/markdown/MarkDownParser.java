@@ -2,7 +2,6 @@ package com.nekosuki.multieditor.markdown;
 
 import java.util.Stack;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MarkDownParser {
 
