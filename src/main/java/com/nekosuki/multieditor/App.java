@@ -5,6 +5,7 @@ import com.nekosuki.multieditor.components.SideMenuBar;
 import com.nekosuki.multieditor.components.Splitter;
 import com.nekosuki.multieditor.components.StatusBar;
 
+import com.nekosuki.multieditor.markdown.MarkDownParser;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -30,6 +31,9 @@ public class App extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        MarkDownParser parser = new MarkDownParser();
+        parser.convert("# This is Test");
     }
 
     public void AppStart() {

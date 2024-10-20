@@ -1,11 +1,11 @@
 package com.nekosuki.multieditor.markdown;
 
 public class Token {
-    int id;
-    Token parent;
-    TokenType elementType;
-    State state;
-    String content;
+    private final int id;
+    private final Token parent;
+    private final TokenType elementType;
+    private final State state;
+    private final String content;
 
     public Token(int id, Token parent, TokenType tokenType, State state, String content) {
         this.id = id;
@@ -37,5 +37,16 @@ public class Token {
 
     public String getContent() {
         return content;
+    }
+
+    @Override
+    public String toString() {
+        return "Token{" +
+                "id=" + id +
+                ", elementType=" + elementType +
+                ", state=" + state +
+                ", parent=" + parent.getId() +
+                ", content='" + content + '\'' +
+                '}';
     }
 }

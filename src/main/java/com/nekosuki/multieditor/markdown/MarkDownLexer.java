@@ -6,14 +6,14 @@ import java.util.regex.Pattern;
 
 public class MarkDownLexer {
     // 各記号の検知パターン
-    private final Pattern headingPattern = Pattern.compile("^(#{1,6})\\s*(.+)$");
-    private final Pattern boldPattern = Pattern.compile("(\\*\\*|__)(.*?)\\1");
-    private final Pattern listPattern = Pattern.compile("^(\\s*[*\\-+]\\s+|\\s*\\d+\\.\\s+)(.+)$");
-    private final Pattern italicPattern = Pattern.compile("([*_])([^*_]+)\\1");
-    private final Pattern linkPattern = Pattern.compile("\\[([^]]+)]\\(([^)]+)\\)");
-    private final Pattern imagePattern = Pattern.compile("!\\[([^]]*)]\\(([^)]+)\\)");
-    private final Pattern inlineCodePattern = Pattern.compile("`([^`]+)`");
-    private final Pattern codeBlockPattern = Pattern.compile("```[\\s\\S]*?```");
+    public final Pattern headingPattern = Pattern.compile("^(#{1,6})\\s+(.+)$");
+    public final Pattern boldPattern = Pattern.compile("(\\*\\*|__)(.*?)\\1");
+    public final Pattern listPattern = Pattern.compile("^(\\s*[*\\-+]\\s+|\\s*\\d+\\.\\s+)(.+)$");
+    public final Pattern italicPattern = Pattern.compile("([*_])([^*_]+)\\1");
+    public final Pattern linkPattern = Pattern.compile("\\[([^]]+)]\\(([^)]+)\\)");
+    public final Pattern imagePattern = Pattern.compile("!\\[([^]]*)]\\(([^)]+)\\)");
+    public final Pattern inlineCodePattern = Pattern.compile("`([^`]+)`");
+    public final Pattern codeBlockPattern = Pattern.compile("```[\\s\\S]*?```");
 
     // それぞれのタイプのトークンを返すメソット
     public Token getHeadingElement(int id, Token parent, String content) {
