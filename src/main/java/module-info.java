@@ -9,9 +9,11 @@ module com.nekosuki.multieditor {
     requires net.synedra.validatorfx;
     requires eu.hansolo.tilesfx;
     requires org.fxmisc.richtext;
+    requires flexmark.util.misc;
 
     opens com.nekosuki.multieditor to javafx.fxml;
     exports com.nekosuki.multieditor;
     exports com.nekosuki.multieditor.components;
     exports com.nekosuki.multieditor.components.topmenu_items;
+    exports com.nekosuki.multieditor.html;
 }
