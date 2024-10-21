@@ -13,6 +13,4 @@ public class GenerateHTML {
                     %s
                 </body>
             </html>""";
-
-    private final MutableD
 }
