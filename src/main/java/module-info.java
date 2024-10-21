@@ -12,4 +12,6 @@ module com.nekosuki.multieditor {
 
     opens com.nekosuki.multieditor to javafx.fxml;
     exports com.nekosuki.multieditor;
+    exports com.nekosuki.multieditor.components;
+    exports com.nekosuki.multieditor.components.topmenu_items;
 }
