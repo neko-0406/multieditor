@@ -40,10 +40,10 @@ public class MainApp extends Application {
         String styleSheetPath = "";
         try{
             if (theme.equals("light")) {
-                styleSheetPath = Objects.requireNonNull(MainApp.class.getResource("/style_light.css")).toExternalForm();
+                styleSheetPath = Objects.requireNonNull(MainApp.class.getResource("/com/nekosuki/multieditor/style_light.css")).toExternalForm();
             }
             else if (theme.equals("dark")) {
-                styleSheetPath = Objects.requireNonNull(MainApp.class.getResource("/style_dark.css")).toExternalForm();
+                styleSheetPath = Objects.requireNonNull(MainApp.class.getResource("/com/nekosuki/multieditor/style_dark.css")).toExternalForm();
             }
         }catch (NullPointerException e){
             System.out.println("StyleSheet is not found....");

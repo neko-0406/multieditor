@@ -13,9 +13,7 @@ import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Objects;
@@ -68,14 +66,14 @@ public class GenerateHTML {
     private String getAppThemeCss() {
        String theme = MainApp.getAppConfig().getProperty("display_theme", "light");
        StringBuilder cssTexts = new StringBuilder();
-       String url;
+       InputStream data;
        if (theme.equals("light")) {
-           url = Objects.requireNonNull(MainApp.class.getResource("github_dark.css")).toExternalForm();
+           data = Objects.requireNonNull(MainApp.class.getResourceAsStream("md_dark.css"));
        }else {
-           url = Objects.requireNonNull(MainApp.class.getResource("github_light.css")).toExternalForm();
+           data = Objects.requireNonNull(MainApp.class.getResourceAsStream("md_light.css"));
        }
 
-       try(BufferedReader br = new BufferedReader(new FileReader(url, Charset.defaultCharset()))) {
+       try(BufferedReader br = new BufferedReader(new InputStreamReader(data, Charset.defaultCharset()))) {
            String line;
            while((line = br.readLine()) != null) {
                cssTexts.append(line);
