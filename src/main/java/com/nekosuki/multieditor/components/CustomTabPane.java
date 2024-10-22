@@ -7,6 +7,5 @@ import javafx.scene.control.TabPane;
 public class CustomTabPane extends TabPane{
     public CustomTabPane() {
         super();
-        this.getTabs().add(new MarkDownTab());
     }
 }

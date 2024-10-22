@@ -23,6 +23,7 @@ public class MarkDownTab extends Tab {
         splitPane.getItems().addAll(codeArea, webView);
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         this.setContent(splitPane);
+        webView.getEngine().loadContent(generateHtml.getTemplateHtml());
         addEventListener();
     }
 

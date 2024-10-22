@@ -35,6 +35,20 @@ public class GenerateHTML {
                 </body>
             </html>""";
 
+    private final String tempHtml = """
+            <!DOCTYPE html>
+            <html lang=jp>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Temp Html</title>
+                    <style>
+                        %s
+                    </style>
+                </head>
+                <body></body>
+            </html>
+            """;
+
     private final Parser parser;
     private final HtmlRenderer renderer;
 
@@ -62,15 +76,18 @@ public class GenerateHTML {
 
         return baseHtml.formatted(baseUrl,css,html);
     }
+    public String getTemplateHtml() {
+        return tempHtml.formatted(getAppThemeCss());
+    }
 
     private String getAppThemeCss() {
        String theme = MainApp.getAppConfig().getProperty("display_theme", "light");
        StringBuilder cssTexts = new StringBuilder();
        InputStream data;
        if (theme.equals("light")) {
-           data = Objects.requireNonNull(MainApp.class.getResourceAsStream("md_dark.css"));
-       }else {
            data = Objects.requireNonNull(MainApp.class.getResourceAsStream("md_light.css"));
+       }else {
+           data = Objects.requireNonNull(MainApp.class.getResourceAsStream("md_dark.css"));
        }
 
        try(BufferedReader br = new BufferedReader(new InputStreamReader(data, Charset.defaultCharset()))) {
