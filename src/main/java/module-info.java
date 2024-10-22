@@ -11,10 +11,18 @@ module com.nekosuki.multieditor {
     requires org.fxmisc.richtext;
     requires flexmark.util.data;
     requires flexmark;
+    requires flexmark.ext.autolink;
+    requires flexmark.ext.tables;
+    requires flexmark.ext.gfm.strikethrough;
+    requires flexmark.ext.gfm.tasklist;
+    requires flexmark.ext.footnotes;
+    requires flexmark.ext.typographic;
+    requires flexmark.util.ast;
 
     opens com.nekosuki.multieditor to javafx.fxml;
     exports com.nekosuki.multieditor;
     exports com.nekosuki.multieditor.components;
     exports com.nekosuki.multieditor.components.topmenu_items;
-    exports com.nekosuki.multieditor.html;
+    exports com.nekosuki.multieditor.markdown;
+    opens com.nekosuki.multieditor.markdown to javafx.fxml;
 }
