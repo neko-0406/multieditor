@@ -1,5 +1,8 @@
 package com.nekosuki.multieditor.markdown.elements;
 
+/**
+ * 太字
+ */
 public class BoldToken {
     private final Token parent;
     private final TokenType type;

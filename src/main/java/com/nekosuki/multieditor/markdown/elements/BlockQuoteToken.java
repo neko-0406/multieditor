@@ -1,22 +1,22 @@
 package com.nekosuki.multieditor.markdown.elements;
 
 /**
- * イタリック(斜体)
+ * 引用ブロック
  */
-public class ItalicToken implements Token{
+public class BlockQuoteToken implements Token{
     private final Token parent;
     private final TokenType type;
     private final String value;
 
     /**
-     * Italic Token(斜体)
+     * Block Quote(引用)
      * @param parent 親要素
      * @param value 内容
      */
-    public ItalicToken(Token parent, String value) {
+    public BlockQuoteToken(Token parent, String value) {
         this.parent = parent;
         this.value = value;
-        this.type = TokenType.ITALIC;
+        this.type = TokenType.BLOCK_QUOTE;
     }
 
     public Token getParent() {

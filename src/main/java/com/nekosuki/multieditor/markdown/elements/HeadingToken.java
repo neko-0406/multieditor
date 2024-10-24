@@ -1,5 +1,8 @@
 package com.nekosuki.multieditor.markdown.elements;
 
+/**
+ * 見出しh1 ~ h6
+ */
 public class HeadingToken implements Token {
     private final short level;
     private final Token parent;

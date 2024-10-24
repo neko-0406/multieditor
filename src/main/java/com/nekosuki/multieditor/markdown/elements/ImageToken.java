@@ -1,5 +1,8 @@
 package com.nekosuki.multieditor.markdown.elements;
 
+/**
+ * 画像
+ */
 public class ImageToken implements Token{
     private final Token parent;
     private final TokenType type;

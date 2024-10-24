@@ -1,22 +1,16 @@
 package com.nekosuki.multieditor.markdown.elements;
 
-/**
- * イタリック(斜体)
- */
-public class ItalicToken implements Token{
+public class OrderedList implements Token{
     private final Token parent;
     private final TokenType type;
     private final String value;
+    private final short level;
 
-    /**
-     * Italic Token(斜体)
-     * @param parent 親要素
-     * @param value 内容
-     */
-    public ItalicToken(Token parent, String value) {
+    public OrderedList(Token parent, String value, short level) {
         this.parent = parent;
         this.value = value;
-        this.type = TokenType.ITALIC;
+        this.level = level;
+        this.type = TokenType.ORDERED_LIST;
     }
 
     public Token getParent() {
@@ -29,5 +23,9 @@ public class ItalicToken implements Token{
 
     public String getValue() {
         return value;
+    }
+
+    public short getLevel() {
+        return level;
     }
 }
