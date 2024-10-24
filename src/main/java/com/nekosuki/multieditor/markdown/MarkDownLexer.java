@@ -18,9 +18,15 @@ public class MarkDownLexer {
     private final String orderedListRegex; // 順番ありリスト
     private final String horizontalRuleRegex; // 水平線
 
-
     public MarkDownLexer() {
+        // 行頭から使うやつ
         this.headingRegex = "^(#{1,6})\\s*(.+)$";
+        this.blockQuoteRegex = "^>\\s*(.+)$";
+        this.unorderedListRegex = "^[\\*\\-\\+]\\s(.+)$";
+        this.orderedListRegex = "^\\d+\\.\\s+(.+)$";
+        this.horizontalRuleRegex = "^(\\*\\*\\*|---|___)\\s*$";
+
+        // 文中に埋め込み可能
         this.italicRegex = "\\*(.+?)\\*|_(.+?)_";
         this.boldRegex = "\\*\\*(.+?)\\*\\*|__(.+?)__";
         this.boldAndItalicRegex = "\\*\\*\\*(.+?)\\*\\*\\*";
@@ -29,9 +35,45 @@ public class MarkDownLexer {
         this.imageRegex = "!\\[(.*?)\\]\\(https:?\\/\\/[^\\s]+\\)";
         this.inlineCodeRegex = "`([^`]+?)`";
         this.codeBlockRegex = "```[\\s\\S]*?```";
-        this.blockQuoteRegex = "^>\\s*(.+)$";
-        this.unorderedListRegex = "^[\\*\\-\\+]\\s(.+)$";
-        this.orderedListRegex = "^\\d+\\.\\s+(.+)$";
-        this.horizontalRuleRegex = "^(\\*\\*\\*|---|___)\\s*$";
+    }
+
+    public boolean matchHeading(String t) {
+        return t.matches(headingRegex);
+    }
+    public boolean matchItalic(String t) {
+        return t.matches(italicRegex);
+    }
+    public boolean matchBold(String t) {
+        return t.matches(boldRegex);
+    }
+    public boolean matchBoldAndItalic(String t) {
+        return t.matches(boldAndItalicRegex);
+    }
+    public boolean matchStrikethrough(String t) {
+        return t.matches(strikethroughRegex);
+    }
+    public boolean matchLink(String t) {
+        return t.matches(linkRegex);
+    }
+    public boolean matchImage(String t) {
+        return t.matches(imageRegex);
+    }
+    public boolean matchInlineCode(String t) {
+        return t.matches(inlineCodeRegex);
+    }
+    public boolean matchCodeBlock(String t) {
+        return t.matches(codeBlockRegex);
+    }
+    public boolean matchBlockQuote(String t) {
+        return t.matches(blockQuoteRegex);
+    }
+    public boolean matchUnOrderedList(String t) {
+        return t.matches(unorderedListRegex);
+    }
+    public boolean matchOrderedList(String t) {
+        return t.matches(orderedListRegex);
+    }
+    public boolean matchHorizontalRule(String t) {
+        return t.matches(horizontalRuleRegex);
     }
 }
