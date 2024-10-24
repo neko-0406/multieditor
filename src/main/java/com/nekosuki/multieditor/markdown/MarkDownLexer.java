@@ -33,6 +33,5 @@ public class MarkDownLexer {
         this.unorderedListRegex = "^[\\*\\-\\+]\\s(.+)$";
         this.orderedListRegex = "^\\d+\\.\\s+(.+)$";
         this.horizontalRuleRegex = "^(\\*\\*\\*|---|___)\\s*$";
-
     }
 }
