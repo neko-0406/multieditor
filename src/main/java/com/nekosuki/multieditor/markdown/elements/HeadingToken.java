@@ -4,7 +4,7 @@ package com.nekosuki.multieditor.markdown.elements;
  * 見出しh1 ~ h6
  */
 public class HeadingToken implements Token {
-    private final short level;
+    private final byte level;
     private final Token parent;
     private final TokenType type;
     private final String value;
@@ -15,7 +15,7 @@ public class HeadingToken implements Token {
      * @param parent 親要素
      * @param value 内容
      */
-    public HeadingToken(short level, Token parent, String value) {
+    public HeadingToken(byte level, Token parent, String value) {
         this.parent = parent;
         this.level = level;
         this.value = value;

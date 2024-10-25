@@ -1,12 +1,12 @@
 package com.nekosuki.multieditor.markdown.elements;
 
-public class UnorderedList implements Token{
+public class UnorderedListToken implements Token{
     private final Token parent;
     private final TokenType type;
     private final short level;
     private final String value;
 
-    public UnorderedList(Token parent, String value, short level) {
+    public UnorderedListToken(Token parent, String value, short level) {
         this.parent = parent;
         this.value = value;
         this.level = level;

@@ -1,5 +1,8 @@
 package com.nekosuki.multieditor.markdown;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * テキストをAST(木構造)に変換
  */
@@ -18,23 +21,51 @@ public class MarkDownLexer {
     private final String orderedListRegex; // 順番ありリスト
     private final String horizontalRuleRegex; // 水平線
 
+    private final Pattern headingPattern;
+    private final Pattern italicPattern;
+    private final Pattern boldPattern;
+    private final Pattern boldAndItalicPattern;
+    private final Pattern strikethroughPattern;
+    private final Pattern linkPattern;
+    private final Pattern imagePattern;
+    private final Pattern inlineCodePattern;
+    private final Pattern codeBlockPattern;
+    private final Pattern blockQuotePattern;
+    private final Pattern unorderedListPattern;
+    private final Pattern orderedListPattern;
+    private final Pattern horizontalPattern;
+
     public MarkDownLexer() {
         // 行頭から使うやつ
-        this.headingRegex = "^(#{1,6})\\s*(.+)$";
-        this.blockQuoteRegex = "^>\\s*(.+)$";
-        this.unorderedListRegex = "^[\\*\\-\\+]\\s(.+)$";
-        this.orderedListRegex = "^\\d+\\.\\s+(.+)$";
-        this.horizontalRuleRegex = "^(\\*\\*\\*|---|___)\\s*$";
+        this.headingRegex = "^(#{1,6})\\s*(.+)$"; // #
+        this.blockQuoteRegex = "^>\\s*(.+)$";  // >
+        this.unorderedListRegex = "^(\\s+)?[*\\-+]\\s(.+)$";  // * or - or +
+        this.orderedListRegex = "^(\\s+)?\\d+\\.\\s+(.+)$";  // n.
+        this.horizontalRuleRegex = "^(\\*\\*\\*|---|___)\\s*$";  // - or * or _
 
         // 文中に埋め込み可能
+        this.linkRegex = "\\[(.+?)]\\((https?://[^ ]+)\\)";
+        this.imageRegex = "!\\[(.*?)]\\(https?://[^ ]+\\)";
+        this.codeBlockRegex = "```[\\s\\S]*?```";
         this.italicRegex = "\\*(.+?)\\*|_(.+?)_";
         this.boldRegex = "\\*\\*(.+?)\\*\\*|__(.+?)__";
         this.boldAndItalicRegex = "\\*\\*\\*(.+?)\\*\\*\\*";
         this.strikethroughRegex = "~~(.+?)~~";
-        this.linkRegex = "\\[(.+?)\\]\\((https?:\\/\\/[^\\s]+)\\)";
-        this.imageRegex = "!\\[(.*?)\\]\\(https:?\\/\\/[^\\s]+\\)";
         this.inlineCodeRegex = "`([^`]+?)`";
-        this.codeBlockRegex = "```[\\s\\S]*?```";
+
+        this.headingPattern = Pattern.compile(headingRegex);
+        this.italicPattern = Pattern.compile(italicRegex);
+        this.boldPattern = Pattern.compile(boldRegex);
+        this.boldAndItalicPattern = Pattern.compile(boldAndItalicRegex);
+        this.strikethroughPattern = Pattern.compile(strikethroughRegex);
+        this.linkPattern = Pattern.compile(linkRegex);
+        this.imagePattern = Pattern.compile(imageRegex);
+        this.inlineCodePattern = Pattern.compile(inlineCodeRegex);
+        this.codeBlockPattern = Pattern.compile(codeBlockRegex);
+        this.blockQuotePattern = Pattern.compile(blockQuoteRegex);
+        this.unorderedListPattern = Pattern.compile(unorderedListRegex);
+        this.orderedListPattern = Pattern.compile(orderedListRegex);
+        this.horizontalPattern = Pattern.compile(horizontalRuleRegex);
     }
 
     public boolean matchHeading(String t) {
@@ -75,5 +106,45 @@ public class MarkDownLexer {
     }
     public boolean matchHorizontalRule(String t) {
         return t.matches(horizontalRuleRegex);
+    }
+
+    public Matcher matcherHeading(String input) {
+        return headingPattern.matcher(input);
+    }
+    public Matcher matcherItalic(String input) {
+        return italicPattern.matcher(input);
+    }
+    public Matcher matcherBold(String input) {
+        return boldPattern.matcher(input);
+    }
+    public Matcher matcherBoldAndItalic(String in) {
+        return boldAndItalicPattern.matcher(in);
+    }
+    public Matcher matcherStrikethrough(String in) {
+        return strikethroughPattern.matcher(in);
+    }
+    public Matcher matcherLink(String in) {
+        return linkPattern.matcher(in);
+    }
+    public Matcher matcherImage(String in) {
+        return imagePattern.matcher(in);
+    }
+    public Matcher matcherInlineCode(String in) {
+        return inlineCodePattern.matcher(in);
+    }
+    public Matcher matcherCodeBlock(String in) {
+        return codeBlockPattern.matcher(in);
+    }
+    public Matcher matcherBlockQuote(String in) {
+        return blockQuotePattern.matcher(in);
+    }
+    public Matcher matcherUnorderedList(String in) {
+        return unorderedListPattern.matcher(in);
+    }
+    public Matcher matcherOrderedList(String in) {
+        return orderedListPattern.matcher(in);
+    }
+    public Matcher matcherHorizontalRule(String in) {
+        return horizontalPattern.matcher(in);
     }
 }

@@ -13,5 +13,6 @@ public enum TokenType {
     UNORDERED_LIST,
     ORDERED_LIST,
     HORIZONTAL_RULE,
-    TEXT
+    TEXT,
+    ROOT
 }
