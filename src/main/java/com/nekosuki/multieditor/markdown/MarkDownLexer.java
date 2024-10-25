@@ -39,13 +39,13 @@ public class MarkDownLexer {
         // 行頭から使うやつ
         this.headingRegex = "^(#{1,6})\\s*(.+)$"; // #
         this.blockQuoteRegex = "^>\\s*(.+)$";  // >
-        this.unorderedListRegex = "^(\\s+)?[*\\-+]\\s(.+)$";  // * or - or +
-        this.orderedListRegex = "^(\\s+)?\\d+\\.\\s+(.+)$";  // n.
+        this.unorderedListRegex = "^(\\s*[*\\-+])\\s(.+)$";  // * or - or +
+        this.orderedListRegex = "^(\\s*\\d+\\.)\\s+(.+)$";  // n.
         this.horizontalRuleRegex = "^(\\*\\*\\*|---|___)\\s*$";  // - or * or _
 
         // 文中に埋め込み可能
         this.linkRegex = "\\[(.+?)]\\((https?://[^ ]+)\\)";
-        this.imageRegex = "!\\[(.*?)]\\(https?://[^ ]+\\)";
+        this.imageRegex = "!\\[(.*?)]\\((https?|files)://[^ ]+\\)";
         this.codeBlockRegex = "```[\\s\\S]*?```";
         this.italicRegex = "\\*(.+?)\\*|_(.+?)_";
         this.boldRegex = "\\*\\*(.+?)\\*\\*|__(.+?)__";

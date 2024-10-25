@@ -30,7 +30,7 @@ public class MarkDownParser {
         char beforeChar;
 
         // # This is *test*
-
+        // 行頭から始める要素
         if (lexer.matchHeading(line)) {  // Heading
             Matcher matcher = lexer.matcherHeading(line);
             if (matcher.matches()) {
@@ -50,22 +50,42 @@ public class MarkDownParser {
                 line = matcher.group(2);
             }
         }
-        else if (lexer.matchUnOrderedList(line)) {
+        else if (lexer.matchUnOrderedList(line)) {  //unOrderedList
             Matcher matcher = lexer.matcherUnorderedList(line);
             if (matcher.matches()) {
-                byte level = (byte) (matcher.group(1).length() / indentLength);
-                UnorderedListToken token = new UnorderedListToken(parent, ">", level);
+                String group1 = matcher.group(1);
+                String value = group1.substring(group1.length() - 1);
+                String indent = group1.replace(value, "");
+                byte level = (byte) (indent.length() / indentLength);
+                UnorderedListToken token = new UnorderedListToken(parent, value, level);
                 parent = token;
                 tokens.push(token);
                 line = matcher.group(2);
             }
         }
-        else if (lexer.matchOrderedList(line)) {
+        else if (lexer.matchOrderedList(line)) {  // orderedList
             Matcher matcher = lexer.matcherOrderedList(line);
             if (matcher.matches()) {
-
+                String group1 = matcher.group(1);
+                String value = group1.substring(group1.length() -2);
+                String indent = group1.replace(value, "");
+                byte level = (byte) (indent.length() / indentLength);
+                OrderedListToken token = new OrderedListToken(parent, value, level);
+                parent = token;
+                tokens.push(token);
+                line = matcher.group(2);
             }
         }
+        else if (lexer.matchHorizontalRule(line)) {
+            Matcher matcher = lexer.matcherHorizontalRule(line);
+            if (matcher.matches()) {
+                HorizontalRuleToken token = new HorizontalRuleToken(parent, matcher.group(1));
+                parent = token;
+                tokens.push(token);
+            }
+        }
+
+
     }
 
     private boolean isSymbol(char word) {
