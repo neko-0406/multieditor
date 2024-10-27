@@ -23,13 +23,11 @@ public class MarkDownParser {
 
     private void tokenize(String line) {
         Stack<Token> tokens = new Stack<>(); // 要素トークン入れる用
-        Stack<TokenType> tokenTypes = new Stack<>(); // 現在の要素選択用
         Token parent = new RootToken();
         int i = 0;
-        char word;
         char beforeChar;
 
-        // # This is *test*
+        //これは**テスト**です
         // 行頭から始める要素
         if (lexer.matchHeading(line)) {  // Heading
             Matcher matcher = lexer.matcherHeading(line);
@@ -85,7 +83,12 @@ public class MarkDownParser {
             }
         }
 
+        StringBuilder sb = new StringBuilder(line);
+        StringBuilder text = new StringBuilder();
+        for (char word : line.toCharArray()) {
 
+            i++;
+        }
     }
 
     private boolean isSymbol(char word) {
