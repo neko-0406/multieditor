@@ -10,4 +10,11 @@ public class RootToken implements Token{
     public TokenType getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return "RootToken{" +
+                "type=" + type +
+                '}';
+    }
 }

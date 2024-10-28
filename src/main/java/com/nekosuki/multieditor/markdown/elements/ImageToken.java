@@ -37,4 +37,13 @@ public class ImageToken implements Token{
     public String getUrl() {
         return url;
     }
+
+    @Override
+    public String toString() {
+        return "ImageToken{" +
+                "type=" + type +
+                ", title='" + title + '\'' +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }

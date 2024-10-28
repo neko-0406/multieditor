@@ -37,4 +37,13 @@ public class HeadingToken implements Token {
     public String getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "HeadingToken{" +
+                "level=" + level +
+                ", type=" + type +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

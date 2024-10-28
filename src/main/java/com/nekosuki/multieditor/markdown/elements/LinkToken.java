@@ -34,4 +34,13 @@ public class LinkToken implements Token{
     public String getUrl() {
         return url;
     }
+
+    @Override
+    public String toString() {
+        return "LinkToken{" +
+                "type=" + type +
+                ", desc='" + desc + '\'' +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }

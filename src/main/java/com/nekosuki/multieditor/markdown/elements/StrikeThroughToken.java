@@ -27,4 +27,12 @@ public class StrikeThroughToken implements Token{
     public String getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "StrikeThroughToken{" +
+                "type=" + type +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

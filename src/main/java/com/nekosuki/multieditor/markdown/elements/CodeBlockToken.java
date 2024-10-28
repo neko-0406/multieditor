@@ -30,4 +30,12 @@ public class CodeBlockToken implements Token{
     public String getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "CodeBlockToken{" +
+                "type=" + type +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

@@ -30,4 +30,12 @@ public class ItalicToken implements Token{
     public String getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "ItalicToken{" +
+                "type=" + type +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

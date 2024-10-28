@@ -30,4 +30,12 @@ public class HorizontalRuleToken implements Token{
     public String getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "HorizontalRuleToken{" +
+                ", type=" + type +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

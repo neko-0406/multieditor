@@ -28,4 +28,13 @@ public class UnorderedListToken implements Token{
     public String getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "UnorderedListToken{" +
+                "type=" + type +
+                ", level=" + level +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

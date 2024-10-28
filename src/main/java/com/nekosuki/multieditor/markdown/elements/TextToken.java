@@ -27,4 +27,12 @@ public class TextToken implements Token{
     public String getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "TextToken{" +
+                "type=" + type +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

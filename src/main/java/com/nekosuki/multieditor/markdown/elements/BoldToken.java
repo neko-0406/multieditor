@@ -18,4 +18,12 @@ public class BoldToken {
         this.type = TokenType.BOLD;
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "BoldToken{" +
+                "type=" + type +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

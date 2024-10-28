@@ -28,4 +28,13 @@ public class OrderedListToken implements Token{
     public short getLevel() {
         return level;
     }
+
+    @Override
+    public String toString() {
+        return "OrderedListToken{" +
+                "type=" + type +
+                ", value='" + value + '\'' +
+                ", level=" + level +
+                '}';
+    }
 }
