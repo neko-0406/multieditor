@@ -42,10 +42,10 @@ public class MarkDownLexer {
         this.unorderedListRegex = "^(\\s*[*\\-+])\\s(.+)$";  // * or - or +
         this.orderedListRegex = "^(\\s*\\d+\\.)\\s+(.+)$";  // n.
         this.horizontalRuleRegex = "^(\\*\\*\\*|---|___)\\s*$";  // - or * or _
+        this.linkRegex = "^\\[(.+?)]\\((https?://[^ ]+)\\)";
+        this.imageRegex = "^!\\[(.*?)]\\((https?|files)://[^ ]+\\)";
 
         // 文中に埋め込み可能
-        this.linkRegex = "\\[(.+?)]\\((https?://[^ ]+)\\)";
-        this.imageRegex = "!\\[(.*?)]\\((https?|files)://[^ ]+\\)";
         this.codeBlockRegex = "```[\\s\\S]*?```";
         this.italicRegex = "\\*(.+?)\\*|_(.+?)_";
         this.boldRegex = "\\*\\*(.+?)\\*\\*|__(.+?)__";

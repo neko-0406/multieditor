@@ -26,7 +26,6 @@ public class MarkDownParser {
         Stack<Token> tokens = new Stack<>(); // 要素トークン入れる用
         Token parent = new RootToken();
         tokens.push(parent);
-        int i = 0;
         char beforeChar;
 
         //これは**テスト**です
@@ -87,26 +86,16 @@ public class MarkDownParser {
 
         System.out.println(tokens);
 
+        StringBuilder texts = new StringBuilder();
+        StringBuilder symbols = new StringBuilder();
         // 文中に入る要素
         char[] chars = line.toCharArray();
-        StringBuilder symbols = new StringBuilder();
-        boolean symbolFlag = false;
-        StringBuilder text = new StringBuilder();
+        int i = 0;  // 記号の数カウント
         for (char c : chars) {
-            if (isSymbol(c)) {  // もし記号なら
-                symbolFlag = true;
-                if (!text.isEmpty()) {  //記号より前の文字列をトークン化
-                    TextToken token = new TextToken(parent, text.toString());
-                    tokens.push(token);
-                    parent = token;
-                    text = new StringBuilder();
-                }
-
+            if (isSymbol(c)) {
                 symbols.append(c);
-
-            }else {  // もし文字なら
-                text.append(c);
-
+            }else {
+                texts.append(c);
             }
         }
     }
