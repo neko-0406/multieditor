@@ -5,12 +5,14 @@ public class OrderedListToken implements Token{
     private final TokenType type;
     private final String value;
     private final short level;
+    private final int id;
 
-    public OrderedListToken(Token parent, String value, short level) {
+    public OrderedListToken(Token parent, String value, short level, int id) {
         this.parent = parent;
         this.value = value;
         this.level = level;
         this.type = TokenType.ORDERED_LIST;
+        this.id = id;
     }
 
     public Token getParent() {
@@ -27,6 +29,11 @@ public class OrderedListToken implements Token{
 
     public short getLevel() {
         return level;
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override

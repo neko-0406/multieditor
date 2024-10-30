@@ -25,93 +25,28 @@ public class MarkDownParser {
         tokenize(testString);
     }
 
-    private void tokenize(String line) {
+    private Stack<Token> tokenize(String line) {
         Stack<Token> tokens = new Stack<>(); // 要素トークン入れる用
-        Token parent = new RootToken();
+        int id = 0;
+        Token parent = new RootToken(id);
         tokens.push(parent);
 
         //これは**テスト**です
-        // 行頭から始める要素
-        if (lexer.matchHeading(line)) {  // Heading
-            Matcher matcher = lexer.matcherHeading(line);
-            if (matcher.matches()) {
-                byte level = (byte) matcher.group(1).length();
-                HeadingToken token = new HeadingToken(level, parent, matcher.group(1));
-                parent = token;
-                tokens.push(token);
-                line = matcher.group(2);
-            }
-        }
-        else if (lexer.matchBlockQuote(line)) {  // BlockQuote
-            Matcher matcher = lexer.matcherBlockQuote(line);
-            if (matcher.matches()) {
-                BlockQuoteToken token = new BlockQuoteToken(parent, matcher.group(1));
-                parent = token;
-                tokens.push(token);
-                line = matcher.group(2);
-            }
-        }
-        else if (lexer.matchUnOrderedList(line)) {  //unOrderedList
-            Matcher matcher = lexer.matcherUnorderedList(line);
-            if (matcher.matches()) {
-                String group1 = matcher.group(1);
-                String value = group1.substring(group1.length() - 1);
-                String indent = group1.replace(value, "");
-                byte level = (byte) (indent.length() / indentLength);
-                UnorderedListToken token = new UnorderedListToken(parent, value, level);
-                parent = token;
-                tokens.push(token);
-                line = matcher.group(2);
-            }
-        }
-        else if (lexer.matchOrderedList(line)) {  // orderedList
-            Matcher matcher = lexer.matcherOrderedList(line);
-            if (matcher.matches()) {
-                String group1 = matcher.group(1);
-                String value = group1.substring(group1.length() -2);
-                String indent = group1.replace(value, "");
-                byte level = (byte) (indent.length() / indentLength);
-                OrderedListToken token = new OrderedListToken(parent, value, level);
-                parent = token;
-                tokens.push(token);
-                line = matcher.group(2);
-            }
-        }
-        else if (lexer.matchHorizontalRule(line)) {
-            Matcher matcher = lexer.matcherHorizontalRule(line);
-            if (matcher.matches()) {
-                HorizontalRuleToken token = new HorizontalRuleToken(parent, matcher.group(1));
-                parent = token;
-                tokens.push(token);
-            }
-        }
 
-        System.out.println(tokens);
-
+        return tokens;
     }
 
-    private void tokenizeInlineText(Token parent, String text, Stack<Token> tokens) {
+    private void tokenizeInlineText(Token parent, String text, Stack<Token> tokens, int id) {
         String processText = text;
-        int i=0;
-        for (char c : processText.toCharArray()) {
-            if (!isSymbol(c)) {
-                i++;
-            }else {
-                break;
+
+        while (!processText.isEmpty()) {
+            Matcher matcher = lexer.matcherBold(processText);
+
+            id++;
+            if (!matcher.find()) {
+                TextToken token = new TextToken(parent, matcher.group(1), id);
             }
         }
-
-        if (i > 0) {  // 文字数0より大きい
-            TextToken token = new TextToken(parent, processText.substring(0, i));
-            tokens.push(token);
-            parent = token;
-        }else {
-
-        }
-
-        processText = processText.substring(i);
-
-        tokenizeInlineText(parent, processText, tokens);
     }
 
     private boolean isSymbol(char word) {

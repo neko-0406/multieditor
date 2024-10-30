@@ -47,7 +47,7 @@ public class MarkDownLexer {
 
         // 文中に埋め込み可能
         this.codeBlockRegex = "```[\\s\\S]*?```";
-        this.italicRegex = "\\*(.+?)\\*|_(.+?)_";
+        this.italicRegex = "\\*(.*?)\\*|_(.+?)_";
         this.boldRegex = "\\*\\*(.+?)\\*\\*|__(.+?)__";
         this.boldAndItalicRegex = "\\*\\*\\*(.+?)\\*\\*\\*";
         this.strikethroughRegex = "~~(.+?)~~";

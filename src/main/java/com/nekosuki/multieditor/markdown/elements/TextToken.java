@@ -4,16 +4,18 @@ public class TextToken implements Token{
     private final Token parent;
     private final TokenType type;
     private final String value;
+    private final int id;
 
     /**
      * Text Token(テキスト)
      * @param parent 親要素
      * @param value 内容
      */
-    public TextToken(Token parent, String value) {
+    public TextToken(Token parent, String value, int id) {
         this.parent = parent;
         this.value = value;
         this.type = TokenType.TEXT;
+        this.id = id;
     }
 
     public Token getParent() {
@@ -26,6 +28,11 @@ public class TextToken implements Token{
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override
