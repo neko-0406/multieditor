@@ -3,6 +3,9 @@ package com.nekosuki.multieditor.markdown;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.markdown.elements.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 
@@ -26,7 +29,6 @@ public class MarkDownParser {
         Stack<Token> tokens = new Stack<>(); // 要素トークン入れる用
         Token parent = new RootToken();
         tokens.push(parent);
-        char beforeChar;
 
         //これは**テスト**です
         // 行頭から始める要素
@@ -86,18 +88,30 @@ public class MarkDownParser {
 
         System.out.println(tokens);
 
-        StringBuilder texts = new StringBuilder();
-        StringBuilder symbols = new StringBuilder();
-        // 文中に入る要素
-        char[] chars = line.toCharArray();
-        int i = 0;  // 記号の数カウント
-        for (char c : chars) {
-            if (isSymbol(c)) {
-                symbols.append(c);
+    }
+
+    private void tokenizeInlineText(Token parent, String text, Stack<Token> tokens) {
+        String processText = text;
+        int i=0;
+        for (char c : processText.toCharArray()) {
+            if (!isSymbol(c)) {
+                i++;
             }else {
-                texts.append(c);
+                break;
             }
         }
+
+        if (i > 0) {  // 文字数0より大きい
+            TextToken token = new TextToken(parent, processText.substring(0, i));
+            tokens.push(token);
+            parent = token;
+        }else {
+
+        }
+
+        processText = processText.substring(i);
+
+        tokenizeInlineText(parent, processText, tokens);
     }
 
     private boolean isSymbol(char word) {
