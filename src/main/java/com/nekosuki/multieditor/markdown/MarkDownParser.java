@@ -41,7 +41,7 @@ public class MarkDownParser {
         char[] chars = text.toCharArray();
         StringBuilder symbol = new StringBuilder();
         StringBuilder tokenValue = new StringBuilder();
-        String tokenSymbol;
+        String tokenSymbol, beforeSymbol;
         boolean isSymbolic = false;
 
         for (char c : chars) {
@@ -92,6 +92,8 @@ public class MarkDownParser {
                                 tokenTypeStack.push(italicToken.getType());
                             }
                         }
+
+                        beforeSymbol = tokenSymbol;
                     }
                     symbol = new StringBuilder();
                 }
