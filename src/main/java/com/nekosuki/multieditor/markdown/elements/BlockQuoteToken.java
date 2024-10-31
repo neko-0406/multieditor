@@ -39,8 +39,10 @@ public class BlockQuoteToken implements Token{
     @Override
     public String toString() {
         return "BlockQuoteToken{" +
+                "parent=" + parent.getType() +
                 ", type=" + type +
                 ", value='" + value + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

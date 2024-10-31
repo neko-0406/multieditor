@@ -27,8 +27,7 @@ public class MarkDownParser {
 
     private Stack<Token> tokenize(String line) {
         Stack<Token> tokens = new Stack<>(); // 要素トークン入れる用
-        int id = 0;
-        Token parent = new RootToken(id);
+        Token parent = new RootToken(0);
         tokens.push(parent);
 
         //これは**テスト**です
@@ -36,7 +35,7 @@ public class MarkDownParser {
         return tokens;
     }
 
-    private void tokenizeInlineText(String text, Token parent, int id) {
+    private void tokenizeInlineText(String text, Token parent) {
         Stack<TokenType> tokenTypeStack = new Stack<>();
         Stack<Token> tokenStack = new Stack<>();
         char[] chars = text.toCharArray();
@@ -45,6 +44,7 @@ public class MarkDownParser {
         String tokenSymbol;
 
         for (char c : chars) {
+            int id = 0;
             if (isSymbol(c)) {  // 記号
                 if (!tokenValue.isEmpty()) { // abc/*
                     id++;

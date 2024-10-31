@@ -42,8 +42,10 @@ public class BoldToken implements Token{
     @Override
     public String toString() {
         return "BoldToken{" +
-                "type=" + type +
+                "parent=" + parent.getType() +
+                ", type=" + type +
                 ", value='" + value + '\'' +
+                ", id=" + id +
                 '}';
     }
 }
