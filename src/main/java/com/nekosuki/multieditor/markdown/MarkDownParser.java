@@ -42,6 +42,7 @@ public class MarkDownParser {
         StringBuilder symbol = new StringBuilder();
         StringBuilder tokenValue = new StringBuilder();
         String tokenSymbol;
+        boolean isSymbolic = false;
 
         for (char c : chars) {
             int id = 0;
@@ -54,39 +55,42 @@ public class MarkDownParser {
                     tokenTypeStack.push(textToken.getType());  // textType push
                     tokenValue = new StringBuilder();  // 文字列リセット
                 }
+                if (!isSymbolic) isSymbolic = true;
                 symbol.append(c);
             }else {  // テキスト
-                if (!symbol.isEmpty()) { // */abc
+                if (!symbol.isEmpty()) { // */abc*/abc
                     tokenSymbol = symbol.toString();
-                    switch (tokenSymbol) {
-                        // italic
-                        case "*", "_" -> {
-                            id++;
-                            ItalicToken italicToken = new ItalicToken(parent, "*", id);
-                            parent = italicToken;
-                            tokenStack.push(italicToken);
-                            tokenTypeStack.push(italicToken.getType());
-                        }
-                        // bold
-                        case "**", "__" -> {
-                            id++;
-                            BoldToken boldToken = new BoldToken(parent, "**", id);
-                            parent = boldToken;
-                            tokenStack.push(boldToken);
-                            tokenTypeStack.push(boldToken.getType());
-                        }
-                        // italic and bold
-                        case "***", "___" -> {
-                            id++;
-                            BoldToken boldToken = new BoldToken(parent, "**", id);
-                            parent = boldToken;
-                            tokenStack.push(boldToken);
-                            tokenTypeStack.push(boldToken.getType());
-                            id++;
-                            ItalicToken italicToken = new ItalicToken(parent, "*", id);
-                            parent = italicToken;
-                            tokenStack.push(italicToken);
-                            tokenTypeStack.push(italicToken.getType());
+                    if (!isSymbolic) {
+                        switch (tokenSymbol) {
+                            // italic
+                            case "*", "_" -> {
+                                id++;
+                                ItalicToken italicToken = new ItalicToken(parent, "*", id);
+                                parent = italicToken;
+                                tokenStack.push(italicToken);
+                                tokenTypeStack.push(italicToken.getType());
+                            }
+                            // bold
+                            case "**", "__" -> {
+                                id++;
+                                BoldToken boldToken = new BoldToken(parent, "**", id);
+                                parent = boldToken;
+                                tokenStack.push(boldToken);
+                                tokenTypeStack.push(boldToken.getType());
+                            }
+                            // italic and bold
+                            case "***", "___" -> {
+                                id++;
+                                BoldToken boldToken = new BoldToken(parent, "**", id);
+                                parent = boldToken;
+                                tokenStack.push(boldToken);
+                                tokenTypeStack.push(boldToken.getType());
+                                id++;
+                                ItalicToken italicToken = new ItalicToken(parent, "*", id);
+                                parent = italicToken;
+                                tokenStack.push(italicToken);
+                                tokenTypeStack.push(italicToken.getType());
+                            }
                         }
                     }
                     symbol = new StringBuilder();
