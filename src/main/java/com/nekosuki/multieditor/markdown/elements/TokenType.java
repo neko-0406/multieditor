@@ -4,6 +4,7 @@ public enum TokenType {
     HEADING,
     ITALIC,
     BOLD,
+    BOLD_AND_ITALIC,
     STRIKETHROUGH,
     LINK,
     IMAGE,

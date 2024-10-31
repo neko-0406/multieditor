@@ -3,9 +3,6 @@ package com.nekosuki.multieditor.markdown;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.markdown.elements.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 
@@ -16,19 +13,20 @@ public class MarkDownParser {
 
     public MarkDownParser() {
         this.lexer = new MarkDownLexer();
-        this.symbols = new char[]{'*','_','`','#','+','-','>','~'};
+        this.symbols = new char[]{'*','_','`','#','+','-','>','~','\u200B'};
         this.indentLength = Byte.parseByte(MainApp.getAppConfig().getProperty("indent_length", "4"));
     }
 
     public void parse(String text) {
-        String testString = "### これは*テスト*です。";
+        String testString = "これは***テスト***です。***abc***";
         tokenize(testString);
     }
 
     private Stack<Token> tokenize(String line) {
         Stack<Token> tokens = new Stack<>(); // 要素トークン入れる用
         Token parent = new RootToken(0);
-        tokens.push(parent);
+
+        var q = tokenizeInlineText(line, parent);
 
         //これは**テスト**です
 
@@ -36,69 +34,62 @@ public class MarkDownParser {
     }
 
     private void tokenizeInlineText(String text, Token parent) {
-        Stack<TokenType> tokenTypeStack = new Stack<>();
+        String processText = text + '\u200B';
         Stack<Token> tokenStack = new Stack<>();
-        char[] chars = text.toCharArray();
-        StringBuilder symbol = new StringBuilder();
-        StringBuilder tokenValue = new StringBuilder();
-        String tokenSymbol, beforeSymbol;
-        boolean isSymbolic = false;
+        int id = 1;
+        int i = 0;
+        char c;
+        // 私は*朝に*ご飯を**食べました**。
 
-        for (char c : chars) {
-            int id = 0;
-            if (isSymbol(c)) {  // 記号
-                if (!tokenValue.isEmpty()) { // abc/*
-                    id++;
-                    TextToken textToken = new TextToken(parent, tokenValue.toString(), id);
-                    parent = textToken;
-                    tokenStack.push(textToken);  // textトークンpush
-                    tokenTypeStack.push(textToken.getType());  // textType push
-                    tokenValue = new StringBuilder();  // 文字列リセット
+        while (!processText.isEmpty()) {
+            System.out.println(i);
+            System.out.println(processText);
+            c = processText.charAt(i);
+
+            if (isSymbol(c)) {
+                if (i != 0) {
+                    String t = processText.substring(0, i);
+                    TextToken textToken = new TextToken(parent, t, id);
+                    tokenStack.push(textToken);
+                    i = 0;
+                    processText = processText.replace(t, "");
                 }
-                if (!isSymbolic) isSymbolic = true;
-                symbol.append(c);
-            }else {  // テキスト
-                if (!symbol.isEmpty()) { // */abc*/abc
-                    tokenSymbol = symbol.toString();
-                    if (!isSymbolic) {
-                        switch (tokenSymbol) {
-                            // italic
-                            case "*", "_" -> {
-                                id++;
-                                ItalicToken italicToken = new ItalicToken(parent, "*", id);
-                                parent = italicToken;
-                                tokenStack.push(italicToken);
-                                tokenTypeStack.push(italicToken.getType());
-                            }
-                            // bold
-                            case "**", "__" -> {
-                                id++;
-                                BoldToken boldToken = new BoldToken(parent, "**", id);
-                                parent = boldToken;
-                                tokenStack.push(boldToken);
-                                tokenTypeStack.push(boldToken.getType());
-                            }
-                            // italic and bold
-                            case "***", "___" -> {
-                                id++;
-                                BoldToken boldToken = new BoldToken(parent, "**", id);
-                                parent = boldToken;
-                                tokenStack.push(boldToken);
-                                tokenTypeStack.push(boldToken.getType());
-                                id++;
-                                ItalicToken italicToken = new ItalicToken(parent, "*", id);
-                                parent = italicToken;
-                                tokenStack.push(italicToken);
-                                tokenTypeStack.push(italicToken.getType());
-                            }
+                // italic and bold or horizontal rule
+                else if (processText.startsWith("***") || processText.startsWith("___") || processText.startsWith("---")) {
+                        Matcher IBmatcher = lexer.matcherBoldAndItalic(processText);
+                        if (IBmatcher.find()) {
+                            BoldAndItalicToken token = new BoldAndItalicToken(parent, IBmatcher.group(1), id);
+                            tokenStack.push(token);
+                            parent = token;
+                            processText = IBmatcher.replaceFirst("");
                         }
-
-                        beforeSymbol = tokenSymbol;
-                    }
-                    symbol = new StringBuilder();
+                        Matcher Hmatcher = lexer.matcherHorizontalRule(processText);
+                        if (Hmatcher.matches()) {
+                            HorizontalRuleToken token = new HorizontalRuleToken(parent, Hmatcher.group(1), id);
+                            tokenStack.push(token);
+                            parent = token;
+                            processText = Hmatcher.replaceFirst("");
+                        }
                 }
-                tokenValue.append(c);
+                // bold
+                else if (processText.startsWith("**") || processText.startsWith("__")) {
+                    Matcher matcher = lexer.matcherBold(processText);
+                    if (matcher.find()) {
+
+                    }
+                }
+                // italic
+                else if (processText.startsWith("*") || processText.startsWith("_")) {}
+
+            } else {
+                i++;
             }
+
+            if (c == '\u200B') break;
+        }
+
+        while (!tokenStack.isEmpty()) {
+            System.out.println(tokenStack.pop());
         }
     }
 

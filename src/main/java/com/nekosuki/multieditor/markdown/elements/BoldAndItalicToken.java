@@ -1,18 +1,22 @@
 package com.nekosuki.multieditor.markdown.elements;
 
-public class UnorderedListToken implements Token{
+public class BoldAndItalicToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final short level;
     private final String value;
     private final int id;
 
-    public UnorderedListToken(Token parent, String value, short level, int id) {
+    /**
+     * Bold and Italic token
+     * @param parent 親要素
+     * @param value 内容
+     * @param id id
+     */
+    public BoldAndItalicToken(Token parent, String value, int id) {
         this.parent = parent;
         this.value = value;
-        this.level = level;
-        this.type = TokenType.UNORDERED_LIST;
         this.id = id;
+        this.type = TokenType.BOLD_AND_ITALIC;
     }
 
     public Token getParent() {
@@ -20,16 +24,8 @@ public class UnorderedListToken implements Token{
     }
 
     @Override
-    public int getId() {
-        return id;
-    }
-
     public TokenType getType() {
         return type;
-    }
-
-    public short getLevel() {
-        return level;
     }
 
     public String getValue() {
@@ -37,11 +33,17 @@ public class UnorderedListToken implements Token{
     }
 
     @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
     public String toString() {
-        return "UnorderedListToken{" +
-                "type=" + type +
-                ", level=" + level +
+        return "BoldAndItalicToken{" +
+                "parent=" + parent.getType() +
+                ", type=" + type +
                 ", value='" + value + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

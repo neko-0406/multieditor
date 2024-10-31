@@ -37,7 +37,7 @@ public class MarkDownLexer {
 
     public MarkDownLexer() {
         // 行頭から使うやつ
-        this.headingRegex = "^(#{1,6})\\s*(.+)$"; // #
+        this.headingRegex = "^(#{1,6}\\s+)(.+)$"; // #
         this.blockQuoteRegex = "^>\\s*(.+)$";  // >
         this.unorderedListRegex = "^(\\s*[*\\-+])\\s(.+)$";  // * or - or +
         this.orderedListRegex = "^(\\s*\\d+\\.)\\s+(.+)$";  // n.
@@ -46,12 +46,12 @@ public class MarkDownLexer {
         this.imageRegex = "^!\\[(.*?)]\\((https?|files)://[^ ]+\\)";
 
         // 文中に埋め込み可能
-        this.codeBlockRegex = "```[\\s\\S]*?```";
-        this.italicRegex = "\\*(.*?)\\*|_(.+?)_";
-        this.boldRegex = "\\*\\*(.+?)\\*\\*|__(.+?)__";
-        this.boldAndItalicRegex = "\\*\\*\\*(.+?)\\*\\*\\*";
-        this.strikethroughRegex = "~~(.+?)~~";
-        this.inlineCodeRegex = "`([^`]+?)`";
+        this.codeBlockRegex = "^```[\\s\\S]*?```";
+        this.italicRegex = "^\\*(.*?)\\*|_(.+?)_";
+        this.boldRegex = "^\\*\\*(.+?)\\*\\*|__(.+?)__";
+        this.boldAndItalicRegex = "^\\*\\*\\*(.+?)\\*\\*\\*";
+        this.strikethroughRegex = "^~~(.+?)~~";
+        this.inlineCodeRegex = "^`([^`]+?)`";
 
         this.headingPattern = Pattern.compile(headingRegex);
         this.italicPattern = Pattern.compile(italicRegex);
@@ -66,46 +66,6 @@ public class MarkDownLexer {
         this.unorderedListPattern = Pattern.compile(unorderedListRegex);
         this.orderedListPattern = Pattern.compile(orderedListRegex);
         this.horizontalPattern = Pattern.compile(horizontalRuleRegex);
-    }
-
-    public boolean matchHeading(String t) {
-        return t.matches(headingRegex);
-    }
-    public boolean matchItalic(String t) {
-        return t.matches(italicRegex);
-    }
-    public boolean matchBold(String t) {
-        return t.matches(boldRegex);
-    }
-    public boolean matchBoldAndItalic(String t) {
-        return t.matches(boldAndItalicRegex);
-    }
-    public boolean matchStrikethrough(String t) {
-        return t.matches(strikethroughRegex);
-    }
-    public boolean matchLink(String t) {
-        return t.matches(linkRegex);
-    }
-    public boolean matchImage(String t) {
-        return t.matches(imageRegex);
-    }
-    public boolean matchInlineCode(String t) {
-        return t.matches(inlineCodeRegex);
-    }
-    public boolean matchCodeBlock(String t) {
-        return t.matches(codeBlockRegex);
-    }
-    public boolean matchBlockQuote(String t) {
-        return t.matches(blockQuoteRegex);
-    }
-    public boolean matchUnOrderedList(String t) {
-        return t.matches(unorderedListRegex);
-    }
-    public boolean matchOrderedList(String t) {
-        return t.matches(orderedListRegex);
-    }
-    public boolean matchHorizontalRule(String t) {
-        return t.matches(horizontalRuleRegex);
     }
 
     public Matcher matcherHeading(String input) {
