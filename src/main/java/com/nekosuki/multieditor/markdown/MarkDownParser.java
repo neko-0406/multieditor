@@ -36,15 +36,62 @@ public class MarkDownParser {
         return tokens;
     }
 
-    private void tokenizeInlineText(Token parent, String text, Stack<Token> tokens, int id) {
-        String processText = text;
+    private void tokenizeInlineText(String text, Token parent, int id) {
+        Stack<TokenType> tokenTypeStack = new Stack<>();
+        Stack<Token> tokenStack = new Stack<>();
+        char[] chars = text.toCharArray();
+        StringBuilder symbol = new StringBuilder();
+        StringBuilder tokenValue = new StringBuilder();
+        String tokenSymbol;
 
-        while (!processText.isEmpty()) {
-            Matcher matcher = lexer.matcherBold(processText);
-
-            id++;
-            if (!matcher.find()) {
-                TextToken token = new TextToken(parent, matcher.group(1), id);
+        for (char c : chars) {
+            if (isSymbol(c)) {  // 記号
+                if (!tokenValue.isEmpty()) { // abc/*
+                    id++;
+                    TextToken textToken = new TextToken(parent, tokenValue.toString(), id);
+                    parent = textToken;
+                    tokenStack.push(textToken);  // textトークンpush
+                    tokenTypeStack.push(textToken.getType());  // textType push
+                    tokenValue = new StringBuilder();  // 文字列リセット
+                }
+                symbol.append(c);
+            }else {  // テキスト
+                if (!symbol.isEmpty()) { // */abc
+                    tokenSymbol = symbol.toString();
+                    switch (tokenSymbol) {
+                        // italic
+                        case "*", "_" -> {
+                            id++;
+                            ItalicToken italicToken = new ItalicToken(parent, "*", id);
+                            parent = italicToken;
+                            tokenStack.push(italicToken);
+                            tokenTypeStack.push(italicToken.getType());
+                        }
+                        // bold
+                        case "**", "__" -> {
+                            id++;
+                            BoldToken boldToken = new BoldToken(parent, "**", id);
+                            parent = boldToken;
+                            tokenStack.push(boldToken);
+                            tokenTypeStack.push(boldToken.getType());
+                        }
+                        // italic and bold
+                        case "***", "___" -> {
+                            id++;
+                            BoldToken boldToken = new BoldToken(parent, "**", id);
+                            parent = boldToken;
+                            tokenStack.push(boldToken);
+                            tokenTypeStack.push(boldToken.getType());
+                            id++;
+                            ItalicToken italicToken = new ItalicToken(parent, "*", id);
+                            parent = italicToken;
+                            tokenStack.push(italicToken);
+                            tokenTypeStack.push(italicToken.getType());
+                        }
+                    }
+                    symbol = new StringBuilder();
+                }
+                tokenValue.append(c);
             }
         }
     }
