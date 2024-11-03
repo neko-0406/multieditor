@@ -3,13 +3,11 @@ package com.nekosuki.multieditor.markdown.elements;
 public class UnorderedListToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final short level;
-    private final String value;
+    private final byte level;
     private final int id;
 
-    public UnorderedListToken(Token parent, String value, short level, int id) {
+    public UnorderedListToken(Token parent, byte level, int id) {
         this.parent = parent;
-        this.value = value;
         this.level = level;
         this.type = TokenType.UNORDERED_LIST;
         this.id = id;
@@ -28,20 +26,17 @@ public class UnorderedListToken implements Token{
         return type;
     }
 
-    public short getLevel() {
+    public byte getLevel() {
         return level;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     @Override
     public String toString() {
         return "UnorderedListToken{" +
-                "type=" + type +
+                "parent=" + parent.getType() +
+                ", type=" + type +
                 ", level=" + level +
-                ", value='" + value + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

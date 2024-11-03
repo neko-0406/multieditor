@@ -6,19 +6,16 @@ package com.nekosuki.multieditor.markdown.elements;
 public class HorizontalRuleToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final String value;
     private final int id;
 
     /**
      * Horizontal Rule(水平線)
      * @param parent 親要素
-     * @param value 内容
      * @param id id
      */
-    public HorizontalRuleToken(Token parent, String value, int id) {
+    public HorizontalRuleToken(Token parent, int id) {
         this.parent = parent;
         this.type = TokenType.HORIZONTAL_RULE;
-        this.value = value;
         this.id = id;
     }
 
@@ -30,10 +27,6 @@ public class HorizontalRuleToken implements Token{
         return type;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     @Override
     public int getId() {
         return id;
@@ -42,8 +35,9 @@ public class HorizontalRuleToken implements Token{
     @Override
     public String toString() {
         return "HorizontalRuleToken{" +
+                "parent=" + parent.getType() +
                 ", type=" + type +
-                ", value='" + value + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

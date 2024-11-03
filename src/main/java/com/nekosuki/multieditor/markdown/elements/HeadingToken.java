@@ -7,20 +7,17 @@ public class HeadingToken implements Token {
     private final byte level;
     private final Token parent;
     private final TokenType type;
-    private final String value;
     private final int id;
 
     /**
      * Heading Token
      * @param level 見出しのレベル
      * @param parent 親要素
-     * @param value 内容
      * @param id id
      */
-    public HeadingToken(byte level, Token parent, String value, int id) {
+    public HeadingToken(byte level, Token parent, int id) {
         this.parent = parent;
         this.level = level;
-        this.value = value;
         this.type = TokenType.HEADING;
         this.id = id;
     }
@@ -37,10 +34,6 @@ public class HeadingToken implements Token {
         return type;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     @Override
     public int getId() {
         return id;
@@ -50,8 +43,8 @@ public class HeadingToken implements Token {
     public String toString() {
         return "HeadingToken{" +
                 "level=" + level +
+                "parent=" + parent.getType() +
                 ", type=" + type +
-                ", value='" + value + '\'' +
                 '}';
     }
 }

@@ -6,18 +6,15 @@ package com.nekosuki.multieditor.markdown.elements;
 public class BlockQuoteToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final String value;
     private final int id;
 
     /**
      * Block Quote(引用)
      * @param parent 親要素
-     * @param value 内容
      * @param id id
      */
-    public BlockQuoteToken(Token parent, String value, int id) {
+    public BlockQuoteToken(Token parent, int id) {
         this.parent = parent;
-        this.value = value;
         this.type = TokenType.BLOCK_QUOTE;
         this.id = id;
     }
@@ -30,10 +27,6 @@ public class BlockQuoteToken implements Token{
         return type;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     public int getId() {return id;}
 
     @Override
@@ -41,7 +34,6 @@ public class BlockQuoteToken implements Token{
         return "BlockQuoteToken{" +
                 "parent=" + parent.getType() +
                 ", type=" + type +
-                ", value='" + value + '\'' +
                 ", id=" + id +
                 '}';
     }

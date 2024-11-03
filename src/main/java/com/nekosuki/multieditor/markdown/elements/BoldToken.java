@@ -6,7 +6,6 @@ package com.nekosuki.multieditor.markdown.elements;
 public class BoldToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final String value;
     private final int id;
 
     /**
@@ -18,7 +17,6 @@ public class BoldToken implements Token{
     public BoldToken(Token parent, String value, int id) {
         this.parent = parent;
         this.type = TokenType.BOLD;
-        this.value = value;
         this.id = id;
     }
 
@@ -28,10 +26,6 @@ public class BoldToken implements Token{
 
     public TokenType getType() {
         return type;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     @Override
@@ -44,7 +38,6 @@ public class BoldToken implements Token{
         return "BoldToken{" +
                 "parent=" + parent.getType() +
                 ", type=" + type +
-                ", value='" + value + '\'' +
                 ", id=" + id +
                 '}';
     }

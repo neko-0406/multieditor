@@ -6,7 +6,6 @@ package com.nekosuki.multieditor.markdown.elements;
 public class ItalicToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final String value;
     private final int id;
 
     /**
@@ -17,7 +16,6 @@ public class ItalicToken implements Token{
      */
     public ItalicToken(Token parent, String value, int id) {
         this.parent = parent;
-        this.value = value;
         this.type = TokenType.ITALIC;
         this.id = id;
     }
@@ -30,10 +28,6 @@ public class ItalicToken implements Token{
         return type;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     @Override
     public int getId() {return id;}
 
@@ -41,7 +35,7 @@ public class ItalicToken implements Token{
     public String toString() {
         return "ItalicToken{" +
                 "type=" + type +
-                ", value='" + value + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
 }

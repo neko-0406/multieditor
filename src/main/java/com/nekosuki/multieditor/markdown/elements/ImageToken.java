@@ -6,8 +6,8 @@ package com.nekosuki.multieditor.markdown.elements;
 public class ImageToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final String title;
-    private final String url;
+    private final TextToken title;
+    private final TextToken url;
     private final int id;
 
     /**
@@ -17,7 +17,7 @@ public class ImageToken implements Token{
      * @param url url
      * @param id id
      */
-    public ImageToken(Token parent, String title, String url, int id) {
+    public ImageToken(Token parent, TextToken title, TextToken url, int id) {
         this.parent = parent;
         this.title = title;
         this.url = url;
@@ -33,11 +33,11 @@ public class ImageToken implements Token{
         return type;
     }
 
-    public String getTitle() {
+    public TextToken getTitle() {
         return title;
     }
 
-    public String getUrl() {
+    public TextToken getUrl() {
         return url;
     }
 
@@ -47,9 +47,11 @@ public class ImageToken implements Token{
     @Override
     public String toString() {
         return "ImageToken{" +
-                "type=" + type +
-                ", title='" + title + '\'' +
-                ", url='" + url + '\'' +
+                "parent=" + parent.toString() +
+                ", type=" + type +
+                ", title=" + title +
+                ", url=" + url +
+                ", id=" + id +
                 '}';
     }
 }

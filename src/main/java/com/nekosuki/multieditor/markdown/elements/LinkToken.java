@@ -3,21 +3,21 @@ package com.nekosuki.multieditor.markdown.elements;
 public class LinkToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final String desc;
-    private final String url;
+    private final TextToken title;
+    private final TextToken url;
     private final int id;
 
     /**
      * Link Token(リンク)
      * @param parent 親要素
-     * @param desc リンクの説明
+     * @param title リンクの説明
      * @param url url
      * @param id id
      */
-    public LinkToken(Token parent, String desc, String url, int id) {
+    public LinkToken(Token parent, TextToken title, TextToken url, int id) {
         this.parent = parent;
         this.type = TokenType.LINK;
-        this.desc = desc;
+        this.title = title;
         this.url = url;
         this.id = id;
     }
@@ -30,11 +30,11 @@ public class LinkToken implements Token{
         return type;
     }
 
-    public String getDesc() {
-        return desc;
+    public TextToken getTitle() {
+        return title;
     }
 
-    public String getUrl() {
+    public TextToken getUrl() {
         return url;
     }
 
@@ -46,9 +46,11 @@ public class LinkToken implements Token{
     @Override
     public String toString() {
         return "LinkToken{" +
-                "type=" + type +
-                ", desc='" + desc + '\'' +
-                ", url='" + url + '\'' +
+                "parent=" + parent.getType() +
+                ", type=" + type +
+                ", title=" + title +
+                ", url=" + url +
+                ", id=" + id +
                 '}';
     }
 }

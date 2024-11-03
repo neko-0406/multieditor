@@ -7,104 +7,41 @@ import java.util.regex.Pattern;
  * テキストをAST(木構造)に変換
  */
 public class MarkDownLexer {
-    private final String headingRegex; // 見出しh1 ~ h6
-    private final String italicRegex; // 強調(Italic)
-    private final String boldRegex; // 太字
-    private final String boldAndItalicRegex; // 太字＋強調
-    private final String strikethroughRegex; // 取り消し線
-    private final String linkRegex; // リンク
-    private final String imageRegex; // 画像
-    private final String inlineCodeRegex; // '`'で囲まれた方
-    private final String codeBlockRegex; // '```'で囲まれた方
-    private final String blockQuoteRegex; // 引用
-    private final String unorderedListRegex; // 順番なしリスト
-    private final String orderedListRegex; // 順番ありリスト
-    private final String horizontalRuleRegex; // 水平線
-
-    private final Pattern headingPattern;
-    private final Pattern italicPattern;
-    private final Pattern boldPattern;
-    private final Pattern boldAndItalicPattern;
-    private final Pattern strikethroughPattern;
-    private final Pattern linkPattern;
-    private final Pattern imagePattern;
-    private final Pattern inlineCodePattern;
-    private final Pattern codeBlockPattern;
-    private final Pattern blockQuotePattern;
-    private final Pattern unorderedListPattern;
-    private final Pattern orderedListPattern;
-    private final Pattern horizontalPattern;
+    private final Pattern allPattern;
 
     public MarkDownLexer() {
-        // 行頭から使うやつ
-        this.headingRegex = "^(#{1,6}\\s+)(.+)$"; // #
-        this.blockQuoteRegex = "^>\\s*(.+)$";  // >
-        this.unorderedListRegex = "^(\\s*[*\\-+])\\s(.+)$";  // * or - or +
-        this.orderedListRegex = "^(\\s*\\d+\\.)\\s+(.+)$";  // n.
-        this.horizontalRuleRegex = "^(\\*\\*\\*|---|___)\\s*$";  // - or * or _
-        this.linkRegex = "^\\[(.+?)]\\((https?://[^ ]+)\\)";
-        this.imageRegex = "^!\\[(.*?)]\\((https?|files)://[^ ]+\\)";
+        String allRegex =
+                // 見出し heading
+                "(^(?<headingHashes>#{1,6})\\s(?<headingText>.*)$)|" +
+                // 引用 block quote
+                "(^>\\s*(?<blockQuote>.+)$)|" +
+                // 順序無しリスト unordered list
+                "(^(?<unorderedListBlank>\\s*?)[*\\-+]\\s(?<unorderedListText>.+)$)|" +
+                // 順序ありリスト ordered list
+                "(^(?<orderedListBlank>\\s*?)\\d+\\.\\s+(?<orderedListText>.+)$)|" +
+                // 水平線 horizontal rule
+                "(^(\\*{3}|-{3}|_{3})\\s*$)|" +
+                // リンク link
+                "(^\\[(?<linkDesc>.+?)]\\((?<linkUrl>https?://[^ ]+)\\))|" +
+                // 画像 image
+                "(^!\\[(?<imageDesc>.*?)]\\((?<imageLink>https?|files)://[^ ]+\\))|" +
+                // コードブロック code block
+                "(^```(?<codeBlock>[\\s\\S]*?)```)|" +
+                // イタリック italic
+                "(^\\*(?<italic1>.*?)\\*|_(?<italic2>.+?)_)|" +
+                // 太字 bold
+                "(^\\*\\*(?<bold1>.+?)\\*\\*|__(?<bold2>.+?)__)|" +
+                // 斜線 strikethrough
+                "(^~~(?<strikethrough>.+?)~~)|" +
+                // inline code 埋め込みコードエリア
+                "(^`(?<inlineText>[^`]+?)`)|" +
+                //text テキスト
+                "(^(?<normalText>.*?)(?=\\*{1,3}|#{1,6}|-{1,3}|_{1,3}|`{1,3}|>|\\+|\\[|!|$))";
 
-        // 文中に埋め込み可能
-        this.codeBlockRegex = "^```[\\s\\S]*?```";
-        this.italicRegex = "^\\*(.*?)\\*|_(.+?)_";
-        this.boldRegex = "^\\*\\*(.+?)\\*\\*|__(.+?)__";
-        this.boldAndItalicRegex = "^\\*\\*\\*(.+?)\\*\\*\\*";
-        this.strikethroughRegex = "^~~(.+?)~~";
-        this.inlineCodeRegex = "^`([^`]+?)`";
-
-        this.headingPattern = Pattern.compile(headingRegex);
-        this.italicPattern = Pattern.compile(italicRegex);
-        this.boldPattern = Pattern.compile(boldRegex);
-        this.boldAndItalicPattern = Pattern.compile(boldAndItalicRegex);
-        this.strikethroughPattern = Pattern.compile(strikethroughRegex);
-        this.linkPattern = Pattern.compile(linkRegex);
-        this.imagePattern = Pattern.compile(imageRegex);
-        this.inlineCodePattern = Pattern.compile(inlineCodeRegex);
-        this.codeBlockPattern = Pattern.compile(codeBlockRegex);
-        this.blockQuotePattern = Pattern.compile(blockQuoteRegex);
-        this.unorderedListPattern = Pattern.compile(unorderedListRegex);
-        this.orderedListPattern = Pattern.compile(orderedListRegex);
-        this.horizontalPattern = Pattern.compile(horizontalRuleRegex);
+        this.allPattern = Pattern.compile(allRegex);
     }
 
-    public Matcher matcherHeading(String input) {
-        return headingPattern.matcher(input);
-    }
-    public Matcher matcherItalic(String input) {
-        return italicPattern.matcher(input);
-    }
-    public Matcher matcherBold(String input) {
-        return boldPattern.matcher(input);
-    }
-    public Matcher matcherBoldAndItalic(String in) {
-        return boldAndItalicPattern.matcher(in);
-    }
-    public Matcher matcherStrikethrough(String in) {
-        return strikethroughPattern.matcher(in);
-    }
-    public Matcher matcherLink(String in) {
-        return linkPattern.matcher(in);
-    }
-    public Matcher matcherImage(String in) {
-        return imagePattern.matcher(in);
-    }
-    public Matcher matcherInlineCode(String in) {
-        return inlineCodePattern.matcher(in);
-    }
-    public Matcher matcherCodeBlock(String in) {
-        return codeBlockPattern.matcher(in);
-    }
-    public Matcher matcherBlockQuote(String in) {
-        return blockQuotePattern.matcher(in);
-    }
-    public Matcher matcherUnorderedList(String in) {
-        return unorderedListPattern.matcher(in);
-    }
-    public Matcher matcherOrderedList(String in) {
-        return orderedListPattern.matcher(in);
-    }
-    public Matcher matcherHorizontalRule(String in) {
-        return horizontalPattern.matcher(in);
+    public Matcher matchRegex(String  in) {
+        return this.allPattern.matcher(in);
     }
 }

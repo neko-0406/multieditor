@@ -3,7 +3,7 @@ package com.nekosuki.multieditor.markdown.elements;
 public class TextToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final String value;
+    private  String value;
     private final int id;
 
     /**
@@ -30,6 +30,10 @@ public class TextToken implements Token{
         return value;
     }
 
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     @Override
     public int getId() {
         return id;
@@ -38,8 +42,10 @@ public class TextToken implements Token{
     @Override
     public String toString() {
         return "TextToken{" +
-                "type=" + type +
+                "parent=" + parent.getType() +
+                ", type=" + type +
                 ", value='" + value + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

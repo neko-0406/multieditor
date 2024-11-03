@@ -6,18 +6,15 @@ package com.nekosuki.multieditor.markdown.elements;
 public class CodeBlockToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final String value;
     private final int id;
 
     /**
      * Code Block(コード置き場)
      * @param parent 親要素
-     * @param value 内容
      * @param id id
      */
-    public CodeBlockToken(Token parent, String value, int id) {
+    public CodeBlockToken(Token parent, int id) {
         this.parent = parent;
-        this.value = value;
         this.type = TokenType.CODE_BLOCK;
         this.id = id;
     }
@@ -30,10 +27,6 @@ public class CodeBlockToken implements Token{
         return type;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     @Override
     public int getId() {
         return id;
@@ -42,8 +35,9 @@ public class CodeBlockToken implements Token{
     @Override
     public String toString() {
         return "CodeBlockToken{" +
-                "type=" + type +
-                ", value='" + value + '\'' +
+                "parent=" + parent.getType() +
+                ", type=" + type +
+                ", id=" + id +
                 '}';
     }
 }

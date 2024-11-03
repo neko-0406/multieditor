@@ -22,6 +22,7 @@ public class RootToken implements Token{
     public String toString() {
         return "RootToken{" +
                 "type=" + type +
+                "id=" + id +
                 '}';
     }
 }

@@ -3,16 +3,16 @@ package com.nekosuki.multieditor.markdown.elements;
 public class OrderedListToken implements Token{
     private final Token parent;
     private final TokenType type;
-    private final String value;
-    private final short level;
+    private final byte indentLevel;
     private final int id;
+//    private final int listNumber;
 
-    public OrderedListToken(Token parent, String value, short level, int id) {
+    public OrderedListToken(Token parent, byte level, int id) {
         this.parent = parent;
-        this.value = value;
-        this.level = level;
+        this.indentLevel = level;
         this.type = TokenType.ORDERED_LIST;
         this.id = id;
+//        this.listNumber = listNumber;
     }
 
     public Token getParent() {
@@ -23,12 +23,8 @@ public class OrderedListToken implements Token{
         return type;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public short getLevel() {
-        return level;
+    public byte getIndentLevel() {
+        return indentLevel;
     }
 
     @Override
@@ -36,12 +32,15 @@ public class OrderedListToken implements Token{
         return id;
     }
 
+//    public int getListNumber() {return listNumber;}
+
     @Override
     public String toString() {
         return "OrderedListToken{" +
-                "type=" + type +
-                ", value='" + value + '\'' +
-                ", level=" + level +
+                "parent=" + parent.getType() +
+                ", type=" + type +
+                ", level=" + indentLevel +
+                ", id=" + id +
                 '}';
     }
 }

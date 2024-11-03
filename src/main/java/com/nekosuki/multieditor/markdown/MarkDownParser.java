@@ -11,9 +11,10 @@ public class MarkDownParser {
     private final char[] symbols;
     private final byte indentLength;
 
+
     public MarkDownParser() {
         this.lexer = new MarkDownLexer();
-        this.symbols = new char[]{'*','_','`','#','+','-','>','~','\u200B'};
+        this.symbols = new char[]{'*','_','`','#','+','-','>','~'};
         this.indentLength = Byte.parseByte(MainApp.getAppConfig().getProperty("indent_length", "4"));
     }
 
@@ -24,84 +25,112 @@ public class MarkDownParser {
 
     private Stack<Token> tokenize(String line) {
         Stack<Token> tokens = new Stack<>(); // 要素トークン入れる用
-        Token parent = new RootToken(0);
+        int id = 0;
+        Token parent = new RootToken(id);
 
-        var q = tokenizeInlineText(line, parent);
-
-        //これは**テスト**です
+        tokenizeInlineText(id, line, parent, tokens);
 
         return tokens;
     }
 
-    private void tokenizeInlineText(String text, Token parent) {
-        String processText = text + '\u200B';
-        Stack<Token> tokenStack = new Stack<>();
-        int id = 1;
-        int i = 0;
-        char c;
-        // 私は*朝に*ご飯を**食べました**。
+    private void tokenizeInlineText(int id, String text, Token parent, Stack<Token> tokenStack) {
+        String processText = text;
+        id++;
+
+        Matcher matcher = lexer.matchRegex(processText);
 
         while (!processText.isEmpty()) {
-            System.out.println(i);
-            System.out.println(processText);
-            c = processText.charAt(i);
 
-            if (isSymbol(c)) {
-                if (i != 0) {
-                    String t = processText.substring(0, i);
-                    TextToken textToken = new TextToken(parent, t, id);
-                    tokenStack.push(textToken);
-                    i = 0;
-                    processText = processText.replace(t, "");
+            if (matcher.find()) {
+                // テキスト(text)
+                if (matcher.group("normalText") != null) {
+                    TextToken token = new TextToken(parent, matcher.group("normalText"), id);
+                    tokenStack.push(token);
+                    parent = token;
+                    processText = matcher.replaceFirst(token.getValue());
                 }
-                // italic and bold or horizontal rule
-                else if (processText.startsWith("***") || processText.startsWith("___") || processText.startsWith("---")) {
-                        Matcher IBmatcher = lexer.matcherBoldAndItalic(processText);
-                        if (IBmatcher.find()) {
-                            BoldAndItalicToken token = new BoldAndItalicToken(parent, IBmatcher.group(1), id);
-                            tokenStack.push(token);
-                            parent = token;
-                            processText = IBmatcher.replaceFirst("");
-                        }
-                        Matcher Hmatcher = lexer.matcherHorizontalRule(processText);
-                        if (Hmatcher.matches()) {
-                            HorizontalRuleToken token = new HorizontalRuleToken(parent, Hmatcher.group(1), id);
-                            tokenStack.push(token);
-                            parent = token;
-                            processText = Hmatcher.replaceFirst("");
-                        }
-                }
-                // bold
-                else if (processText.startsWith("**") || processText.startsWith("__")) {
-                    Matcher matcher = lexer.matcherBold(processText);
-                    if (matcher.find()) {
+                // 見出し(block quote)
+                else if (matcher.group("headingHashes") != null && matcher.group("headingText") != null) {
+                    byte level = Byte.parseByte(matcher.group("headingHashes"));
+                    HeadingToken token = new HeadingToken(level, parent, id);
+                    tokenStack.push(token);
+                    parent = token;
 
+                    tokenizeInlineText(id, matcher.group("headingText"), parent, tokenStack);
+                }
+                // 引用(block quote)
+                else if (matcher.group("blockQuote") != null) {
+                    BlockQuoteToken token = new BlockQuoteToken(parent, id);
+                    tokenStack.push(token);
+                    parent = token;
+
+                    tokenizeInlineText(id, matcher.group("blockQuote"), parent, tokenStack);
+                }
+                // 順序無しリスト(unordered list)
+                else if (matcher.group("unorderedListText") != null) {
+                    int blank = 0;
+                    if (matcher.group("unorderedListBlank") != null) {
+                        blank = matcher.group("unorderedListBlank").length();
                     }
+                    byte level = (byte) (blank / indentLength);
+                    UnorderedListToken token = new UnorderedListToken(parent, level, id);
+                    tokenStack.push(token);
+                    parent = token;
+
+                    tokenizeInlineText(id, matcher.group("unorderedListText"), parent, tokenStack);
                 }
-                // italic
-                else if (processText.startsWith("*") || processText.startsWith("_")) {}
+                // 順序ありリスト(ordered list)
+                else if (matcher.group("orderedListText") != null) {
+                    int blank = 0;
+                    if (matcher.group("orderedListBlank") != null) {
+                        blank = matcher.group("orderedListBlank").length();
+                    }
+                    byte level = (byte) (blank / indentLength);
+                    OrderedListToken token = new OrderedListToken(parent, level, id);
+                    tokenStack.push(token);
+                    parent = token;
 
-            } else {
-                i++;
+                    tokenizeInlineText(id, matcher.group("orderedListText"), parent, tokenStack);
+                }
+                // 水平線(horizontal rule)
+                else if (matcher.group("horizontalRule") != null) {
+                    HorizontalRuleToken token = new HorizontalRuleToken(parent,id);
+                    tokenStack.push(token);
+                    parent = token;
+                }
+                // リンク(link)
+                else if (matcher.group("linkUrl") != null && matcher.group("linkDesc") != null) {
+                    TextToken url = new TextToken(parent, matcher.group("linkUrl"), id);
+                    tokenizeInlineText(id, matcher.group("linkDesc"), parent, tokenStack);
+                }
+                // 画像(image)
+                else if (matcher.group("imageLink") != null) {
+
+
+                }
+                // コードブロック(code block)
+                else if (matcher.group("codeBlock") != null) {
+
+                }
+                // イタリック(italic)
+                else if (matcher.group("italic1") != null || matcher.group("italic2") != null) {
+
+                }
+                // 太字 (bold)
+                else if (matcher.group("bold1") != null || matcher.group("bold2") != null) {
+
+                }
+                // 斜線(strikethrough)
+                else if (matcher.group("strikethrough") != null) {
+
+                }
+                // 埋め込みコード(inline code)
+                else if (matcher.group("inlineText") != null) {
+
+                }
             }
-
-            if (c == '\u200B') break;
         }
 
-        while (!tokenStack.isEmpty()) {
-            System.out.println(tokenStack.pop());
-        }
-    }
 
-    private boolean isSymbol(char word) {
-        boolean bool = false;
-        for (char c : symbols) {
-            if (word == c) {
-                bool = true;
-                break;
-            }
-        }
-
-        return bool;
     }
 }
