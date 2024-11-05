@@ -11,10 +11,9 @@ public class BoldToken implements Token{
     /**
      * Bold Token(太字)
      * @param parent 親要素
-     * @param value 内容
      * @param id id
      */
-    public BoldToken(Token parent, String value, int id) {
+    public BoldToken(Token parent, int id) {
         this.parent = parent;
         this.type = TokenType.BOLD;
         this.id = id;

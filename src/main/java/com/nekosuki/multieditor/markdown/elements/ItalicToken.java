@@ -11,10 +11,9 @@ public class ItalicToken implements Token{
     /**
      * Italic Token(斜体)
      * @param parent 親要素
-     * @param value 内容
      * @param id id
      */
-    public ItalicToken(Token parent, String value, int id) {
+    public ItalicToken(Token parent, int id) {
         this.parent = parent;
         this.type = TokenType.ITALIC;
         this.id = id;

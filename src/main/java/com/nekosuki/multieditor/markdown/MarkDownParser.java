@@ -55,16 +55,12 @@ public class MarkDownParser {
                     HeadingToken token = new HeadingToken(level, parent, id);
                     tokenStack.push(token);
                     parent = token;
-
-                    tokenizeInlineText(id, matcher.group("headingText"), parent, tokenStack);
                 }
                 // 引用(block quote)
                 else if (matcher.group("blockQuote") != null) {
                     BlockQuoteToken token = new BlockQuoteToken(parent, id);
                     tokenStack.push(token);
                     parent = token;
-
-                    tokenizeInlineText(id, matcher.group("blockQuote"), parent, tokenStack);
                 }
                 // 順序無しリスト(unordered list)
                 else if (matcher.group("unorderedListText") != null) {
@@ -76,8 +72,6 @@ public class MarkDownParser {
                     UnorderedListToken token = new UnorderedListToken(parent, level, id);
                     tokenStack.push(token);
                     parent = token;
-
-                    tokenizeInlineText(id, matcher.group("unorderedListText"), parent, tokenStack);
                 }
                 // 順序ありリスト(ordered list)
                 else if (matcher.group("orderedListText") != null) {
@@ -89,8 +83,6 @@ public class MarkDownParser {
                     OrderedListToken token = new OrderedListToken(parent, level, id);
                     tokenStack.push(token);
                     parent = token;
-
-                    tokenizeInlineText(id, matcher.group("orderedListText"), parent, tokenStack);
                 }
                 // 水平線(horizontal rule)
                 else if (matcher.group("horizontalRule") != null) {
@@ -101,32 +93,48 @@ public class MarkDownParser {
                 // リンク(link)
                 else if (matcher.group("linkUrl") != null && matcher.group("linkDesc") != null) {
                     TextToken url = new TextToken(parent, matcher.group("linkUrl"), id);
-                    tokenizeInlineText(id, matcher.group("linkDesc"), parent, tokenStack);
+                    TextToken title = new TextToken(parent, matcher.group("linkDesc"), id);
+                    LinkToken token = new LinkToken(parent, title, url, id);
+                    tokenStack.push(token);
+                    parent = token;
                 }
                 // 画像(image)
-                else if (matcher.group("imageLink") != null) {
-
-
+                else if (matcher.group("imageUrl") != null && matcher.group("imageDesc") != null) {
+                    TextToken url = new TextToken(parent, matcher.group("imageUrl"), id);
+                    TextToken desc = new TextToken(parent, matcher.group("imageDesc"), id);
+                    ImageToken token = new ImageToken(parent, desc, url, id);
+                    tokenStack.push(token);
+                    parent = token;
                 }
                 // コードブロック(code block)
                 else if (matcher.group("codeBlock") != null) {
-
+                    CodeBlockToken token = new CodeBlockToken(parent, id);
+                    tokenStack.push(token);
+                    parent = token;
                 }
                 // イタリック(italic)
                 else if (matcher.group("italic1") != null || matcher.group("italic2") != null) {
-
+                    ItalicToken token = new ItalicToken(parent,id);
+                    tokenStack.push(token);
+                    parent = token;
                 }
                 // 太字 (bold)
                 else if (matcher.group("bold1") != null || matcher.group("bold2") != null) {
-
+                    BoldToken token = new BoldToken(parent, id);
+                    tokenStack.push(token);
+                    parent = token;
                 }
                 // 斜線(strikethrough)
                 else if (matcher.group("strikethrough") != null) {
-
+                    StrikeThroughToken token = new StrikeThroughToken(parent, id);
+                    tokenStack.push(token);
+                    parent = token;
                 }
                 // 埋め込みコード(inline code)
                 else if (matcher.group("inlineText") != null) {
-
+                    InlineCodeToken token = new InlineCodeToken(parent, id);
+                    tokenStack.push(token);
+                    parent = token;
                 }
             }
         }

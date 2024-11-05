@@ -24,7 +24,7 @@ public class MarkDownLexer {
                 // リンク link
                 "(^\\[(?<linkDesc>.+?)]\\((?<linkUrl>https?://[^ ]+)\\))|" +
                 // 画像 image
-                "(^!\\[(?<imageDesc>.*?)]\\((?<imageLink>https?|files)://[^ ]+\\))|" +
+                "(^!\\[(?<imageDesc>.*?)]\\((?<imageUrl>https?|files)://[^ ]+\\))|" +
                 // コードブロック code block
                 "(^```(?<codeBlock>[\\s\\S]*?)```)|" +
                 // イタリック italic

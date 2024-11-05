@@ -10,7 +10,7 @@ public class StrikeThroughToken implements Token{
      * @param parent 親要素
      * @param id id
      */
-    public StrikeThroughToken(TextToken parent, int id) {
+    public StrikeThroughToken(Token parent, int id) {
         this.parent = parent;
         this.type = TokenType.STRIKETHROUGH;
         this.id = id;
