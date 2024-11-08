@@ -9,8 +9,6 @@ import java.util.Stack;
 
 public class CustomTabPane extends TabPane{
 
-    private Stack<WebView> webViewStack;
-
     public CustomTabPane() {
         super();
     }

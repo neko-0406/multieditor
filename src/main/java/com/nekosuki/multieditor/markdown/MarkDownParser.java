@@ -3,24 +3,33 @@ package com.nekosuki.multieditor.markdown;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.markdown.elements.*;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.regex.Matcher;
 
 public class MarkDownParser {
     private final MarkDownLexer lexer;
-    private final char[] symbols;
+//    private final char[] symbols;
     private final byte indentLength;
 
 
     public MarkDownParser() {
         this.lexer = new MarkDownLexer();
-        this.symbols = new char[]{'*','_','`','#','+','-','>','~'};
+//        this.symbols = new char[]{'*','_','`','#','+','-','>','~'};
         this.indentLength = Byte.parseByte(MainApp.getAppConfig().getProperty("indent_length", "4"));
     }
 
     public void parse(String text) {
-        String testString = "これは***テスト***です。***abc***";
-        tokenize(testString);
+        String[] lines = text.split("\n");
+        Queue<Stack<Token>> tokenLine = new ArrayDeque<>();
+        for (String line : lines) {
+            tokenLine.add(tokenize(line));
+        }
+
+        while (!tokenLine.isEmpty()) {
+            System.out.println(tokenLine.poll());
+        }
     }
 
     private Stack<Token> tokenize(String line) {
@@ -55,12 +64,14 @@ public class MarkDownParser {
                     HeadingToken token = new HeadingToken(level, parent, id);
                     tokenStack.push(token);
                     parent = token;
+                    tokenizeInlineText(id, matcher.group("headingText"), parent, tokenStack);
                 }
                 // 引用(block quote)
                 else if (matcher.group("blockQuote") != null) {
                     BlockQuoteToken token = new BlockQuoteToken(parent, id);
                     tokenStack.push(token);
                     parent = token;
+                    tokenizeInlineText(id, matcher.group("blockQuote"), parent, tokenStack);
                 }
                 // 順序無しリスト(unordered list)
                 else if (matcher.group("unorderedListText") != null) {
@@ -72,6 +83,7 @@ public class MarkDownParser {
                     UnorderedListToken token = new UnorderedListToken(parent, level, id);
                     tokenStack.push(token);
                     parent = token;
+                    tokenizeInlineText(id, matcher.group("unorderedListText"), parent, tokenStack);
                 }
                 // 順序ありリスト(ordered list)
                 else if (matcher.group("orderedListText") != null) {
@@ -83,6 +95,7 @@ public class MarkDownParser {
                     OrderedListToken token = new OrderedListToken(parent, level, id);
                     tokenStack.push(token);
                     parent = token;
+                    tokenizeInlineText(id, matcher.group("orderedListText"), parent, tokenStack);
                 }
                 // 水平線(horizontal rule)
                 else if (matcher.group("horizontalRule") != null) {
@@ -117,18 +130,31 @@ public class MarkDownParser {
                     ItalicToken token = new ItalicToken(parent,id);
                     tokenStack.push(token);
                     parent = token;
+                    if (matcher.group("italic1") != null) {
+                        tokenizeInlineText(id, matcher.group("italic1"), parent, tokenStack);
+                    }
+                    else if (matcher.group("italic2") != null) {
+                        tokenizeInlineText(id, matcher.group("italic2"), parent, tokenStack);
+                    }
                 }
                 // 太字 (bold)
                 else if (matcher.group("bold1") != null || matcher.group("bold2") != null) {
                     BoldToken token = new BoldToken(parent, id);
                     tokenStack.push(token);
                     parent = token;
+                    if (matcher.group("bold1") != null) {
+                        tokenizeInlineText(id, matcher.group("italic1"), parent, tokenStack);
+                    }
+                    else if (matcher.group("bold2") != null) {
+                        tokenizeInlineText(id, matcher.group("italic2"), parent, tokenStack);
+                    }
                 }
                 // 斜線(strikethrough)
                 else if (matcher.group("strikethrough") != null) {
                     StrikeThroughToken token = new StrikeThroughToken(parent, id);
                     tokenStack.push(token);
                     parent = token;
+                    tokenizeInlineText(id, matcher.group("strikethrough"), parent, tokenStack);
                 }
                 // 埋め込みコード(inline code)
                 else if (matcher.group("inlineText") != null) {
@@ -138,7 +164,6 @@ public class MarkDownParser {
                 }
             }
         }
-
 
     }
 }
