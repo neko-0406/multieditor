@@ -20,23 +20,23 @@ public class MarkDownLexer {
                 // 順序ありリスト ordered list
                 "(^(?<orderedListBlank>\\s*?)\\d+\\.\\s+(?<orderedListText>.+)$)|" +
                 // 水平線 horizontal rule
-                "(^(\\*{3}|-{3}|_{3})\\s*$)|" +
+                "(^(?<horizontalRule>\\*{3}|-{3}|_{3})\\s*$)|" +
                 // リンク link
-                "(^\\[(?<linkDesc>.+?)]\\((?<linkUrl>https?://[^ ]+)\\))|" +
+                "(\\[(?<linkDesc>.+?)]\\((?<linkUrl>https?://[^ ]+)\\))|" +
                 // 画像 image
-                "(^!\\[(?<imageDesc>.*?)]\\((?<imageUrl>https?|files)://[^ ]+\\))|" +
+                "(!\\[(?<imageDesc>.*?)]\\((?<imageUrl>https?|files)://[^ ]+\\))|" +
                 // コードブロック code block
                 "(^```(?<codeBlock>[\\s\\S]*?)```)|" +
                 // イタリック italic
-                "(^\\*(?<italic1>.*?)\\*|_(?<italic2>.+?)_)|" +
+                "(\\*(?<italic1>.*?)\\*|_(?<italic2>.+?)_)|" +
                 // 太字 bold
-                "(^\\*\\*(?<bold1>.+?)\\*\\*|__(?<bold2>.+?)__)|" +
+                "(\\*\\*(?<bold1>.+?)\\*\\*|__(?<bold2>.+?)__)|" +
                 // 斜線 strikethrough
-                "(^~~(?<strikethrough>.+?)~~)|" +
+                "(~~(?<strikethrough>.+?)~~)|" +
                 // inline code 埋め込みコードエリア
-                "(^`(?<inlineText>[^`]+?)`)|" +
+                "(`(?<inlineText>[^`]+?)`)|" +
                 //text テキスト
-                "(^(?<normalText>.*?)(?=\\*{1,3}|#{1,6}|-{1,3}|_{1,3}|`{1,3}|>|\\+|\\[|!|$))";
+                "(^(?<normalText>.*?)(?=\\*{1,3}|#{1,6}|-{1,3}|_{1,3}|`{1,3}|>|\\+|\\[|!|$|\u200B))";
 
         this.allPattern = Pattern.compile(allRegex);
     }

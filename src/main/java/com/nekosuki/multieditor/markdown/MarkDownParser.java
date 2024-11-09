@@ -30,6 +30,7 @@ public class MarkDownParser {
         while (!tokenLine.isEmpty()) {
             System.out.println(tokenLine.poll());
         }
+        System.out.println("end!!!!!!!!!!!!!!!!!!");
     }
 
     private Stack<Token> tokenize(String line) {
@@ -43,12 +44,15 @@ public class MarkDownParser {
     }
 
     private void tokenizeInlineText(int id, String text, Token parent, Stack<Token> tokenStack) {
-        String processText = text;
+        String processText = text + '\u200B';
         id++;
 
         Matcher matcher = lexer.matchRegex(processText);
 
+        // これは*てすと*です
+
         while (!processText.isEmpty()) {
+//            System.out.println(processText);
 
             if (matcher.find()) {
                 // テキスト(text)
@@ -56,15 +60,15 @@ public class MarkDownParser {
                     TextToken token = new TextToken(parent, matcher.group("normalText"), id);
                     tokenStack.push(token);
                     parent = token;
-                    processText = matcher.replaceFirst(token.getValue());
+                    processText = matcher.replaceFirst("");
                 }
-                // 見出し(block quote)
+                // 見出し(heading)
                 else if (matcher.group("headingHashes") != null && matcher.group("headingText") != null) {
-                    byte level = Byte.parseByte(matcher.group("headingHashes"));
+                    byte level = (byte) (matcher.group("headingHashes").length());
                     HeadingToken token = new HeadingToken(level, parent, id);
                     tokenStack.push(token);
                     parent = token;
-                    tokenizeInlineText(id, matcher.group("headingText"), parent, tokenStack);
+                    processText = matcher.replaceFirst("${headingText}");
                 }
                 // 引用(block quote)
                 else if (matcher.group("blockQuote") != null) {
@@ -72,6 +76,7 @@ public class MarkDownParser {
                     tokenStack.push(token);
                     parent = token;
                     tokenizeInlineText(id, matcher.group("blockQuote"), parent, tokenStack);
+                    processText = matcher.replaceFirst("${blockQuote}");
                 }
                 // 順序無しリスト(unordered list)
                 else if (matcher.group("unorderedListText") != null) {
@@ -143,10 +148,10 @@ public class MarkDownParser {
                     tokenStack.push(token);
                     parent = token;
                     if (matcher.group("bold1") != null) {
-                        tokenizeInlineText(id, matcher.group("italic1"), parent, tokenStack);
+                        tokenizeInlineText(id, matcher.group("bold1"), parent, tokenStack);
                     }
                     else if (matcher.group("bold2") != null) {
-                        tokenizeInlineText(id, matcher.group("italic2"), parent, tokenStack);
+                        tokenizeInlineText(id, matcher.group("bold2"), parent, tokenStack);
                     }
                 }
                 // 斜線(strikethrough)
@@ -163,6 +168,7 @@ public class MarkDownParser {
                     parent = token;
                 }
             }
+            else break;
         }
 
     }

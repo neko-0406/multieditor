@@ -34,7 +34,7 @@ public class MainApp extends Application {
         scene.getStylesheets().add(getStyleSheetPath(styleTheme));
 
         MarkDownParser parser = new MarkDownParser();
-        parser.parse("");
+        parser.parse("# これは*てすと*です\n## これは**テスト**です");
 
         primaryStage.setScene(scene);
         primaryStage.show();
