@@ -31,23 +31,11 @@ public class GenerateHTML {
                     </style>
                 </head>
                 <body>
-                    %s
+                    <div class="container">
+                        %s
+                    <div/>
                 </body>
             </html>""";
-
-    private final String tempHtml = """
-            <!DOCTYPE html>
-            <html lang=jp>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Temp Html</title>
-                    <style>
-                        %s
-                    </style>
-                </head>
-                <body></body>
-            </html>
-            """;
 
     private final Parser parser;
     private final HtmlRenderer renderer;
@@ -75,9 +63,6 @@ public class GenerateHTML {
         String html = renderer.render(document);
 
         return baseHtml.formatted(baseUrl,css,html);
-    }
-    public String getTemplateHtml() {
-        return tempHtml.formatted(getAppThemeCss());
     }
 
     private String getAppThemeCss() {

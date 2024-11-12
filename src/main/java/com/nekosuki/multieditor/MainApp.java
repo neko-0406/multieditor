@@ -1,7 +1,6 @@
 package com.nekosuki.multieditor;
 
 import com.nekosuki.multieditor.components.*;
-import com.nekosuki.multieditor.markdown.MarkDownParser;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -32,9 +31,6 @@ public class MainApp extends Application {
         String styleTheme = appConfig.getProperty("display_theme", "light");
         Scene scene = new Scene(borderPane, 1200, 800);
         scene.getStylesheets().add(getStyleSheetPath(styleTheme));
-
-        MarkDownParser parser = new MarkDownParser();
-        parser.parse("# これは*てすと*です\n## これは**テスト**です");
 
         primaryStage.setScene(scene);
         primaryStage.show();

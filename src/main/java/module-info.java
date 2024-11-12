@@ -18,6 +18,7 @@ module com.nekosuki.multieditor {
     requires flexmark.ext.footnotes;
     requires flexmark.ext.typographic;
     requires flexmark.util.ast;
+    requires org.jetbrains.annotations;
 
     opens com.nekosuki.multieditor to javafx.fxml;
     exports com.nekosuki.multieditor;

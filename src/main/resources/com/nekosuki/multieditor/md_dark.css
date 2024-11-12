@@ -10,3 +10,7 @@ body {
     word-wrap: break-word;
     scrollbar-width: auto !important;
 }
+
+div.container {
+    padding: 0 0 0 20px
+}

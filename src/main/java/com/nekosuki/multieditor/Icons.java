@@ -3,7 +3,7 @@ package com.nekosuki.multieditor;
 public enum Icons {
     FILES("files");
 
-    private String iconName;
+    private final String iconName;
 
     Icons(String iconName) {
         this.iconName = iconName;
