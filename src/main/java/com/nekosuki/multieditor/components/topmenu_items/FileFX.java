@@ -7,16 +7,29 @@ import com.nekosuki.multieditor.components.tabs.TextTab;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 
 public class FileFX extends Menu {
+    private static int i = 0;
+
     public FileFX() {
         super("ファイル");
         this.getItems().addAll(
             openFile()
         );
+    }
+
+    private MenuItem newFile() {
+        MenuItem item = new MenuItem("新規作成");
+        item.setOnAction(event -> {
+            i++;
+            TextInputDialog dialog = new TextInputDialog("ファイル名を入力");
+
+        });
+        return item;
     }
 
     private MenuItem openFile() {

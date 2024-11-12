@@ -12,7 +12,8 @@ public class EditFX extends Menu {
     public EditFX() {
         super("編集");
         this.getItems().addAll(
-            undo()
+            undo(),
+            redo()
         );
     }
 
@@ -23,6 +24,22 @@ public class EditFX extends Menu {
             Tab tab = MainApp.getComponents().getCustomTabPane().getSelectionModel().getSelectedItem();
             if (tab instanceof MarkDownTab mTab) {
                 mTab.undo();
+            }
+            else if (tab instanceof TextTab tTab) {
+                tTab.redo();
+            }
+        });
+
+        return item;
+    }
+
+    private MenuItem redo() {
+        MenuItem item = new MenuItem("やり直す");
+        item.setAccelerator(KeyCombination.valueOf("Ctrl+Y"));
+        item.setOnAction(event -> {
+            Tab tab = MainApp.getComponents().getCustomTabPane().getSelectionModel().getSelectedItem();
+            if (tab instanceof MarkDownTab mTab) {
+                mTab.redo();
             }
             else if (tab instanceof TextTab tTab) {
                 tTab.redo();
