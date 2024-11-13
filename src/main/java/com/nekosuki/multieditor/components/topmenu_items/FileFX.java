@@ -15,24 +15,29 @@ import java.io.File;
 import java.util.Optional;
 
 public class FileFX extends Menu {
-    private static int i = 0;
 
     public FileFX() {
         super("ファイル");
         this.getItems().addAll(
             openFile(),
-            newFile()
+            newTextFile()
         );
     }
 
-    private MenuItem newFile() {
-        MenuItem item = new MenuItem("新規作成");
+    private MenuItem newTextFile() {
+        MenuItem item = new MenuItem("新しいテキストファイル");
         item.setAccelerator(KeyCombination.valueOf("Ctrl+N"));
         item.setOnAction(event -> {
-            i++;
-            TextTab tab = new TextTab();
-            tab.setText("Untitled-" + i);
-            MainApp.getComponents().getCustomTabPane().getTabs().add(tab);
+            TextInputDialog textInputDialog = new TextInputDialog();
+            textInputDialog.setHeaderText("ファイル名を入力");
+            textInputDialog.setContentText("ファイル名：");
+            textInputDialog.getDialogPane().setPrefWidth(300);
+            Optional<String> result = textInputDialog.showAndWait();
+            result.ifPresent(name -> {
+                TextTab tab = new TextTab();
+                tab.setText(name);
+                MainApp.getComponents().getCustomTabPane().getTabs().add(tab);
+            });
         });
         return item;
     }
