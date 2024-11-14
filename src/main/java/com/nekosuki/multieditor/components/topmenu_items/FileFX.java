@@ -7,6 +7,7 @@ import com.nekosuki.multieditor.components.tabs.TextTab;
 import com.sun.tools.javac.Main;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -28,7 +29,22 @@ public class FileFX extends Menu {
     private MenuItem openDir() {
         MenuItem item = new MenuItem("フォルダを開く");
         item.setOnAction(event -> {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("フォルダを選択");
+            String path = MainApp.getAppConfig().getProperty("current_dir", System.getProperty("user.home"));
+            if (path.isEmpty()) path = System.getProperty("user.home");
+            directoryChooser.setInitialDirectory(new File(path));
 
+            File file = directoryChooser.showDialog(null);
+            if (!file.exists()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Folder no found....");
+                alert.setHeaderText("選択されたフォルダが存在していません");
+                alert.setContentText("");
+                alert.show();
+                return;
+            }
+            MainApp.getAppConfig().replaceProperty("current_dir", file.getAbsolutePath());
         });
         return item;
     }

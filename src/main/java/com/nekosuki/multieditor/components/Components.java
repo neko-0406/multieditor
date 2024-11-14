@@ -1,13 +1,12 @@
 package com.nekosuki.multieditor.components;
 
-import com.nekosuki.multieditor.components.topmenu_items.FileFX;
-
 public class Components {
     private final Splitter splitter;
     private final SideMenuBar sideMenuBar;
     private final StatusBar statusBar;
     private final CustomTabPane customTabPane;
     private final DisplaySideMenuArea displaySideMenuArea;
+    private final CustomTreeView customTreeView;
     private final MenuBar menuBar;
 
     public Components() {
@@ -17,9 +16,12 @@ public class Components {
         displaySideMenuArea = new DisplaySideMenuArea();
         menuBar = new MenuBar();
         splitter = new Splitter();
+        customTreeView = new CustomTreeView();
 
         readySplitter();
     }
+
+    public CustomTreeView getCustomTreeView() {return customTreeView;}
 
     public Splitter getSplitter() {
         return splitter;
@@ -46,6 +48,7 @@ public class Components {
     }
 
     private void readySplitter() {
+        displaySideMenuArea.getChildren().add(customTreeView);
         splitter.getItems().addAll(displaySideMenuArea, customTabPane);
     }
 }

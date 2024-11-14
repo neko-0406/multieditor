@@ -33,6 +33,14 @@ public class MainApp extends Application {
         scene.getStylesheets().add(getStyleSheetPath(styleTheme));
 
         primaryStage.setScene(scene);
+        primaryStage.showingProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue && !newValue) {
+                String currentPath = appConfig.getProperty("current_dir", "");
+                if (!currentPath.isEmpty()) appConfig.replaceProperty("last_open_dir", currentPath);
+                appConfig.replaceProperty("current_dir", "");
+                appConfig.writeProperties();
+            }
+        });
         primaryStage.show();
     }
 
