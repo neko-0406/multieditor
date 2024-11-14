@@ -4,10 +4,8 @@ import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.tabs.FileType;
 import com.nekosuki.multieditor.components.tabs.MarkDownTab;
 import com.nekosuki.multieditor.components.tabs.TextTab;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextInputDialog;
+import com.sun.tools.javac.Main;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.FileChooser;
 
@@ -20,13 +18,44 @@ public class FileFX extends Menu {
         super("ファイル");
         this.getItems().addAll(
             openFile(),
-            newTextFile()
+            newTextFile(),
+            newMarkDownFile(),
+            new SeparatorMenuItem(),
+            openDir()
         );
+    }
+
+    private MenuItem openDir() {
+        MenuItem item = new MenuItem("フォルダを開く");
+        item.setOnAction(event -> {
+
+        });
+        return item;
+    }
+
+    private MenuItem newMarkDownFile() {
+        MenuItem item = new MenuItem("新しいマークダウンファイル");
+        item.setOnAction(event -> {
+            TextInputDialog textInputDialog = new TextInputDialog();
+            textInputDialog.setHeaderText("ファイル名を入力");
+            textInputDialog.setContentText("ファイル名：");
+            textInputDialog.getDialogPane().setPrefWidth(300);
+            Optional<String> result = textInputDialog.showAndWait();
+            result.ifPresent(name -> {
+                MarkDownTab tab = new MarkDownTab();
+                String fileName = name;
+                if (!name.endsWith(".md") || !name.endsWith(".markdown")){
+                    fileName += ".md";
+                }
+                tab.setText(fileName);
+                MainApp.getComponents().getCustomTabPane().getTabs().add(tab);
+            });
+        });
+        return item;
     }
 
     private MenuItem newTextFile() {
         MenuItem item = new MenuItem("新しいテキストファイル");
-        item.setAccelerator(KeyCombination.valueOf("Ctrl+N"));
         item.setOnAction(event -> {
             TextInputDialog textInputDialog = new TextInputDialog();
             textInputDialog.setHeaderText("ファイル名を入力");
