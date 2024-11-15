@@ -48,6 +48,7 @@ public class FileFX extends Menu {
             }
             MainApp.getAppConfig().replaceProperty("current_dir", file.getAbsolutePath());
             FileTreeItem fileTreeItem = new FileTreeItem(new FileItem(file));
+            fileTreeItem.setExpanded(true);
             MainApp.getComponents().getCustomTreeView().setRoot(fileTreeItem);
         });
         return item;

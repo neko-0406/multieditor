@@ -18,6 +18,8 @@ module com.nekosuki.multieditor {
     requires flexmark.ext.footnotes;
     requires flexmark.ext.typographic;
     requires flexmark.util.ast;
+    requires org.kordamp.ikonli.javafx;
+    requires org.kordamp.ikonli.core;
     requires org.jetbrains.annotations;
     requires jdk.compiler;
 

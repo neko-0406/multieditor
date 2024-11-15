@@ -2,18 +2,23 @@ package com.nekosuki.multieditor;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
 import java.io.InputStream;
 
 public class AppConfig {
-    private final String configFile;
+
+    public static final String CODE_TEXT_SIZE = "code_text_size";
+    public static final String CURRENT_DIR = "current_dir";
+    public static final String DISPLAY_THEME = "display_theme";
+    public static final String LAST_OPEN_DIR = "last_open_dir";
+    public static final String CLICK_COUNT = "click_count";
+
+    private static final String configFile = "./AppConfig.properties";
     private final Properties properties;
 
     public AppConfig() {
-        configFile = "./AppConfig.properties";
         properties = loadPropertiesFile();
     }
 
@@ -36,6 +41,7 @@ public class AppConfig {
                              current_dir: Currently open folder
                              display_theme: Current Color Theme
                              last_open_dir: Last opened folder
+                             click_count: click count for explorer
                              """;
             this.properties.store(out, comment);
         }catch (IOException e){

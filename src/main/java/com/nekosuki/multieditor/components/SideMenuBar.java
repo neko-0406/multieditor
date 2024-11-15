@@ -1,11 +1,10 @@
 package com.nekosuki.multieditor.components;
 
-import com.nekosuki.multieditor.IconManager;
-import com.nekosuki.multieditor.Icons;
-
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class SideMenuBar extends ToolBar {
     private final String buttonClass;
@@ -21,10 +20,11 @@ public class SideMenuBar extends ToolBar {
     }
 
     private Button setExplorerButton() {
-        Button button = new Button(null, IconManager.getIcon(Icons.FILES));
-        button.setMinHeight(32);
-        button.setMinWidth(32);
+        FontIcon fileIcon = new FontIcon("far-folder");
+        fileIcon.setIconSize(32);
+        Button button = new Button(null, fileIcon);
         button.getStyleClass().add(buttonClass);
+        button.setTooltip(new Tooltip("エクスプローラー"));
         return button;
     }
 }

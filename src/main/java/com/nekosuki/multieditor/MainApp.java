@@ -1,11 +1,14 @@
 package com.nekosuki.multieditor;
 
 import com.nekosuki.multieditor.components.*;
+import com.nekosuki.multieditor.components.treeview.FileItem;
+import com.nekosuki.multieditor.components.treeview.FileTreeItem;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.Objects;
 
 public class MainApp extends Application {
@@ -18,30 +21,44 @@ public class MainApp extends Application {
     }
 
     @Override
+    public void init() {
+        appConfig = new AppConfig();
+    }
+
+    @Override
     public void start(Stage primaryStage) {
         components = new Components();
-        appConfig = new AppConfig();
-
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(components.getMenuBar());
         borderPane.setCenter(components.getSplitter());
         borderPane.setLeft(components.getSideMenuBar());
         borderPane.setBottom(components.getStatusBar());
 
-        String styleTheme = appConfig.getProperty("display_theme", "light");
+        String styleTheme = appConfig.getProperty(AppConfig.DISPLAY_THEME, "light");
         Scene scene = new Scene(borderPane, 1200, 800);
         scene.getStylesheets().add(getStyleSheetPath(styleTheme));
 
         primaryStage.setScene(scene);
         primaryStage.showingProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue && !newValue) {
-                String currentPath = appConfig.getProperty("current_dir", "");
-                if (!currentPath.isEmpty()) appConfig.replaceProperty("last_open_dir", currentPath);
-                appConfig.replaceProperty("current_dir", "");
+                String currentPath = appConfig.getProperty(AppConfig.CURRENT_DIR, "");
+                if (!currentPath.isEmpty()) appConfig.replaceProperty(AppConfig.LAST_OPEN_DIR, currentPath);
+                appConfig.replaceProperty(AppConfig.CURRENT_DIR, "");
                 appConfig.writeProperties();
             }
         });
+        appInit();
         primaryStage.show();
+    }
+
+    private void appInit() {
+        String dirPath = appConfig.getProperty(AppConfig.LAST_OPEN_DIR, "");
+        File dir = new File(dirPath);
+        if (dir.exists()) {
+            FileTreeItem treeItem = new FileTreeItem(new FileItem(dir));
+            treeItem.setExpanded(true);
+            components.getCustomTreeView().setRoot(treeItem);
+        }
     }
 
     private String getStyleSheetPath(String theme) {
