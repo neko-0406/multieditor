@@ -4,6 +4,8 @@ import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.tabs.FileType;
 import com.nekosuki.multieditor.components.tabs.MarkDownTab;
 import com.nekosuki.multieditor.components.tabs.TextTab;
+import com.nekosuki.multieditor.components.treeview.FileItem;
+import com.nekosuki.multieditor.components.treeview.FileTreeItem;
 import com.sun.tools.javac.Main;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
@@ -45,6 +47,8 @@ public class FileFX extends Menu {
                 return;
             }
             MainApp.getAppConfig().replaceProperty("current_dir", file.getAbsolutePath());
+            FileTreeItem fileTreeItem = new FileTreeItem(new FileItem(file));
+            MainApp.getComponents().getCustomTreeView().setRoot(fileTreeItem);
         });
         return item;
     }

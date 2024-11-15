@@ -1,8 +1,8 @@
 package com.nekosuki.multieditor;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -31,7 +31,13 @@ public class AppConfig {
 
     public void writeProperties() {
         try(OutputStream out = Files.newOutputStream(Paths.get(configFile))) {
-            this.properties.store(out, null);
+            String comment = """
+                             code_text_size: Text size of the code
+                             current_dir: Currently open folder
+                             display_theme: Current Color Theme
+                             last_open_dir: Last opened folder
+                             """;
+            this.properties.store(out, comment);
         }catch (IOException e){
             throw new RuntimeException(e);
         }

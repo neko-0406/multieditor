@@ -7,12 +7,8 @@ public class FileItem {
     private final FileType fileType;
 
     public FileItem(File file) {
-        this(file, FileType.FILE);
-    }
-
-    private FileItem(File file, FileType fileType) {
         this.file = file;
-        this.fileType = fileType;
+        this.fileType = file.isDirectory() ? FileType.FOLDER : FileType.FILE;
     }
 
     public String getFileName() {
