@@ -58,6 +58,7 @@ public class MainApp extends Application {
             FileTreeItem treeItem = new FileTreeItem(new FileItem(dir));
             treeItem.setExpanded(true);
             components.getCustomTreeView().setRoot(treeItem);
+            components.getRootDirTitlePane().setText(dir.getName());
         }
     }
 

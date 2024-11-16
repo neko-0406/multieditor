@@ -1,5 +1,8 @@
 package com.nekosuki.multieditor.components;
 
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.AnchorPane;
+
 public class Components {
     private final Splitter splitter;
     private final SideMenuBar sideMenuBar;
@@ -8,6 +11,7 @@ public class Components {
     private final DisplaySideMenuArea displaySideMenuArea;
     private final CustomTreeView customTreeView;
     private final MenuBar menuBar;
+    private final TitledPane rootDirTitlePane;
 
     public Components() {
         sideMenuBar = new SideMenuBar();
@@ -17,6 +21,7 @@ public class Components {
         menuBar = new MenuBar();
         splitter = new Splitter();
         customTreeView = new CustomTreeView();
+        rootDirTitlePane = new TitledPane();
 
         readySplitter();
     }
@@ -43,12 +48,20 @@ public class Components {
         return displaySideMenuArea;
     }
 
+    public TitledPane getRootDirTitlePane() {return rootDirTitlePane;}
+
     public MenuBar getMenuBar() {
         return menuBar;
     }
 
     private void readySplitter() {
-        displaySideMenuArea.getChildren().add(customTreeView);
+        AnchorPane.setTopAnchor(rootDirTitlePane, 0.0);
+        AnchorPane.setLeftAnchor(rootDirTitlePane, 0.0);
+        AnchorPane.setBottomAnchor(rootDirTitlePane, 0.0);
+        AnchorPane.setRightAnchor(rootDirTitlePane, 0.0);
+        displaySideMenuArea.getChildren().add(rootDirTitlePane);
+        rootDirTitlePane.setContent(customTreeView);
+        rootDirTitlePane.setCollapsible(false);
         splitter.getItems().addAll(displaySideMenuArea, customTabPane);
     }
 }

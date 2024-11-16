@@ -6,6 +6,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.web.WebView;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -14,6 +15,7 @@ public class MarkDownTab extends Tab {
     private final CodeArea codeArea;
     private final WebView webView;
     private File file;
+    private boolean isEdited;
     private final static GenerateHTML generateHtml = new GenerateHTML();
 
     public MarkDownTab() {
@@ -24,6 +26,7 @@ public class MarkDownTab extends Tab {
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         splitPane.getItems().addAll(codeArea,webView);
         this.setContent(splitPane);
+        isEdited = false;
         addEventListener();
     }
 
@@ -37,10 +40,10 @@ public class MarkDownTab extends Tab {
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         splitPane.getItems().addAll(codeArea,webView);
         this.setContent(splitPane);
-        addEventListener();
         String markdown = readMarkDownFile(markdownFile);
         codeArea.replaceText(markdown);
         loadHtml(markdown);
+        addEventListener();
     }
     public void undo() {
         codeArea.undo();
@@ -48,9 +51,18 @@ public class MarkDownTab extends Tab {
     public void redo() {
         codeArea.redo();
     }
+    public boolean isEdited() {return isEdited;}
 
     private void addEventListener() {
-        codeArea.textProperty().addListener((observable, oldValue, newValue) -> loadHtml(newValue));
+        codeArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!isEdited) {
+                isEdited = true;
+                FontIcon editIcon = new FontIcon("far-edit");
+                editIcon.setIconSize(20);
+                this.setGraphic(editIcon);
+            }
+            loadHtml(newValue);
+        });
     }
 
     private void loadHtml(String value) {

@@ -3,6 +3,8 @@ package com.nekosuki.multieditor.components.treeview;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
+import org.jetbrains.annotations.NotNull;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
 
@@ -40,14 +42,27 @@ public class FileTreeItem extends TreeItem<FileItem> {
             if (files != null) {
                 ObservableList<FileTreeItem> children = FXCollections.observableArrayList();
                 for (File childFile : files) {
-                    FileTreeItem treeItem = new FileTreeItem(new FileItem(childFile));
-                    if (treeItem.isLeaf()) {}//icon付けるならここ;
-                    else {}//フォルダアイコン
+                    FileTreeItem treeItem = getFileTreeItem(childFile);
                     children.add(treeItem);
                 }
                 return children;
             }
         }
         return FXCollections.emptyObservableList();
+    }
+
+    private @NotNull FileTreeItem getFileTreeItem(File childFile) {
+        FileTreeItem treeItem = new FileTreeItem(new FileItem(childFile));
+        if (treeItem.isLeaf()) {
+            FontIcon fileIcon = new FontIcon("far-file");
+            fileIcon.setIconSize(20);
+            treeItem.setGraphic(fileIcon);
+        }
+        else {
+            FontIcon folderIcon = new FontIcon("far-folder");
+            folderIcon.setIconSize(20);
+            treeItem.setGraphic(folderIcon);
+        }
+        return treeItem;
     }
 }
