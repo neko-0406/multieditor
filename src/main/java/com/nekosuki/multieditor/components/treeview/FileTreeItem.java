@@ -3,7 +3,6 @@ package com.nekosuki.multieditor.components.treeview;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import org.jetbrains.annotations.NotNull;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
@@ -15,6 +14,32 @@ public class FileTreeItem extends TreeItem<FileItem> {
 
     public FileTreeItem(FileItem fileItem) {
         super(fileItem);
+        FileType type = this.getValue().getFileType();
+        switch (type) {
+            case FILE -> {
+                FontIcon fileIcon = new FontIcon("far-file");
+                fileIcon.setIconSize(20);
+                this.setGraphic(fileIcon);
+            }
+            case FOLDER -> {
+                FontIcon folderIcon = new FontIcon("far-folder");
+                folderIcon.setIconSize(20);
+                this.setGraphic(folderIcon);
+            }
+        }
+
+        this.expandedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!oldValue && newValue && this.getValue().getFileType() == FileType.FOLDER) {  //フォルダを開いたとき
+                FontIcon folderIcon = new FontIcon("far-folder-open");
+                folderIcon.setIconSize(20);
+                this.setGraphic(folderIcon);
+            }
+            else if (oldValue && !newValue && this.getValue().getFileType() == FileType.FOLDER) {
+                FontIcon folderIcon = new FontIcon("far-folder");
+                folderIcon.setIconSize(20);
+                this.setGraphic(folderIcon);
+            }
+        });
     }
 
     @Override
@@ -42,27 +67,12 @@ public class FileTreeItem extends TreeItem<FileItem> {
             if (files != null) {
                 ObservableList<FileTreeItem> children = FXCollections.observableArrayList();
                 for (File childFile : files) {
-                    FileTreeItem treeItem = getFileTreeItem(childFile);
+                    FileTreeItem treeItem = new FileTreeItem(new FileItem(childFile));
                     children.add(treeItem);
                 }
                 return children;
             }
         }
         return FXCollections.emptyObservableList();
-    }
-
-    private @NotNull FileTreeItem getFileTreeItem(File childFile) {
-        FileTreeItem treeItem = new FileTreeItem(new FileItem(childFile));
-        if (treeItem.isLeaf()) {
-            FontIcon fileIcon = new FontIcon("far-file");
-            fileIcon.setIconSize(20);
-            treeItem.setGraphic(fileIcon);
-        }
-        else {
-            FontIcon folderIcon = new FontIcon("far-folder");
-            folderIcon.setIconSize(20);
-            treeItem.setGraphic(folderIcon);
-        }
-        return treeItem;
     }
 }
