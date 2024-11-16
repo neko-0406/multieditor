@@ -1,5 +1,6 @@
 package com.nekosuki.multieditor.components.tabs;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -10,6 +11,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class TextTab extends Tab{
     private final CodeArea codeArea;
@@ -56,6 +59,22 @@ public class TextTab extends Tab{
         codeArea.redo();
     }
     public boolean isEdited() {return isEdited;}
+    public void saveFile() {
+        try {
+            Path filepath = file.toPath();
+            Files.writeString(filepath, codeArea.getText());
+            if (isEdited) {
+                this.setGraphic(null);
+            }
+        }catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("ファイルの保存に失敗しました");
+            alert.show();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public File getFile() {return file;}
 
     private static String readFile(File file) {
         StringBuilder stringBuilder = new StringBuilder();

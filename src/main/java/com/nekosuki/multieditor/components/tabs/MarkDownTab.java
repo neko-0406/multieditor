@@ -1,15 +1,27 @@
 package com.nekosuki.multieditor.components.tabs;
 
+import com.nekosuki.multieditor.AppConfig;
+import com.nekosuki.multieditor.MainApp;
+import com.nekosuki.multieditor.components.CustomTreeView;
+import com.nekosuki.multieditor.components.treeview.FileItem;
+import com.nekosuki.multieditor.components.treeview.FileTreeItem;
 import com.nekosuki.multieditor.markdown.GenerateHTML;
+import com.sun.tools.javac.Main;
+import javafx.scene.control.Alert;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TreeItem;
 import javafx.scene.web.WebView;
+import javafx.stage.DirectoryChooser;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class MarkDownTab extends Tab {
     private final CodeArea codeArea;
@@ -51,6 +63,46 @@ public class MarkDownTab extends Tab {
     public void redo() {
         codeArea.redo();
     }
+    public void saveFile() {
+        try {
+            if (file != null && file.exists() && isEdited) {
+                Path filepath = file.toPath();
+                Files.writeString(filepath, codeArea.getText());
+            }
+            else if ((file == null || !file.exists()) && isEdited) {
+                String dirPath = MainApp.getAppConfig().getProperty(AppConfig.CURRENT_DIR, "");
+                if (dirPath.isEmpty()) {  // フォルダを開いていない場合
+                    DirectoryChooser chooser = new DirectoryChooser();
+                    chooser.setTitle("保存するフォルダを選択");
+                    chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+                    File dir = chooser.showDialog(null);
+                    if (dir != null) {
+                        Path filepath = dir.toPath().resolve(getText());
+                        Files.writeString(filepath, codeArea.getText());
+                    }
+                }else {
+                    CustomTreeView treeView = MainApp.getComponents().getCustomTreeView();
+                    TreeItem<FileItem> fileItem = treeView.getSelectionModel().getSelectedItem();
+                    if (fileItem != null) {
+                        File dir = fileItem.getValue().getFile();
+                        if (dir.isFile()) dir = dir.getParentFile();
+                        Path filepath = dir.toPath().resolve(getText());
+                        Files.writeString(filepath, codeArea.getText());
+                    }
+                    FileTreeItem treeItem = new FileTreeItem(new FileItem(new File(dirPath)));
+                    treeView.setRoot(treeItem);
+                }
+            }
+            this.setGraphic(null);
+            isEdited = false;
+        }catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("ファイルの保存に失敗しました");
+            alert.show();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     public boolean isEdited() {return isEdited;}
 
     private void addEventListener() {
@@ -83,6 +135,8 @@ public class MarkDownTab extends Tab {
 
         return sb.toString();
     }
+
+    public File getFile() {return file;}
 
 
 }

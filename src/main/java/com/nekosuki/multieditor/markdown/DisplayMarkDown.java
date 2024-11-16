@@ -15,6 +15,7 @@ public class DisplayMarkDown implements Runnable {
     @Override
     public void run() {
         String html = generateHtml.genHtmlTextsFromMarkDown(input);
+        System.out.println(html);
         webEngine.loadContent(html);
     }
 }

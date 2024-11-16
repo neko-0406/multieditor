@@ -1,5 +1,6 @@
 package com.nekosuki.multieditor.components.topmenu_items;
 
+import com.nekosuki.multieditor.AppConfig;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.tabs.FileType;
 import com.nekosuki.multieditor.components.tabs.MarkDownTab;
@@ -23,13 +24,29 @@ public class FileFX extends Menu {
             openFile(),
             newTextFile(),
             newMarkDownFile(),
+            saveFile(),
             new SeparatorMenuItem(),
-            openDir()
+            openDir(),
+            closeDir()
         );
+    }
+
+    private MenuItem closeDir() {
+        MenuItem item = new MenuItem("フォルダを閉じる");
+        item.setOnAction(event -> {
+            TreeItem<FileItem> fileItem = MainApp.getComponents().getCustomTreeView().getRoot();
+            if (fileItem != null) {
+                MainApp.getComponents().getCustomTreeView().setRoot(null);
+                MainApp.getComponents().getRootDirTitlePane().setText("");
+                MainApp.getAppConfig().replaceProperty(AppConfig.LAST_OPEN_DIR, "");
+            }
+        });
+        return item;
     }
 
     private MenuItem openDir() {
         MenuItem item = new MenuItem("フォルダを開く");
+        item.setAccelerator(KeyCombination.valueOf("Ctrl+O"));
         item.setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setTitle("フォルダを選択");
@@ -46,10 +63,28 @@ public class FileFX extends Menu {
                 alert.show();
                 return;
             }
-            MainApp.getAppConfig().replaceProperty("current_dir", file.getAbsolutePath());
+            MainApp.getAppConfig().replaceProperty(AppConfig.CURRENT_DIR, file.getAbsolutePath());
             FileTreeItem fileTreeItem = new FileTreeItem(new FileItem(file));
             fileTreeItem.setExpanded(true);
+            MainApp.getComponents().getRootDirTitlePane().setText(file.getName());
             MainApp.getComponents().getCustomTreeView().setRoot(fileTreeItem);
+        });
+        return item;
+    }
+
+    private MenuItem saveFile() {
+        MenuItem item = new MenuItem("ファイルの保存");
+        item.setAccelerator(KeyCombination.valueOf("Ctrl+S"));
+        item.setOnAction(event -> {
+            TabPane tabPane = MainApp.getComponents().getCustomTabPane();
+            Tab tab = tabPane.getSelectionModel().getSelectedItem();
+
+            if (tab instanceof MarkDownTab mTab) {
+                mTab.saveFile();
+            }
+            else if (tab instanceof TextTab tTab) {
+                tTab.saveFile();
+            }
         });
         return item;
     }

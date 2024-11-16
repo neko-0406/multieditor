@@ -59,6 +59,9 @@ public class MainApp extends Application {
             treeItem.setExpanded(true);
             components.getCustomTreeView().setRoot(treeItem);
             components.getRootDirTitlePane().setText(dir.getName());
+
+            appConfig.replaceProperty(AppConfig.CURRENT_DIR, dirPath);
+            appConfig.replaceProperty(AppConfig.LAST_OPEN_DIR, "");
         }
     }
 

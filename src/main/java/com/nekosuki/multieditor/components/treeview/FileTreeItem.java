@@ -12,13 +12,15 @@ public class FileTreeItem extends TreeItem<FileItem> {
     private boolean isFirstTimeChildren = true;
     private boolean isFirstTimeLeaf = true;
 
+    private static final int iconSize = 20;
+
     public FileTreeItem(FileItem fileItem) {
         super(fileItem);
         FileType type = this.getValue().getFileType();
         switch (type) {
             case FILE -> {
                 FontIcon fileIcon = new FontIcon("far-file");
-                fileIcon.setIconSize(20);
+                fileIcon.setIconSize(iconSize);
                 this.setGraphic(fileIcon);
             }
             case FOLDER -> {
@@ -31,12 +33,12 @@ public class FileTreeItem extends TreeItem<FileItem> {
         this.expandedProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue && newValue && this.getValue().getFileType() == FileType.FOLDER) {  //フォルダを開いたとき
                 FontIcon folderIcon = new FontIcon("far-folder-open");
-                folderIcon.setIconSize(20);
+                folderIcon.setIconSize(iconSize);
                 this.setGraphic(folderIcon);
             }
             else if (oldValue && !newValue && this.getValue().getFileType() == FileType.FOLDER) {
                 FontIcon folderIcon = new FontIcon("far-folder");
-                folderIcon.setIconSize(20);
+                folderIcon.setIconSize(iconSize);
                 this.setGraphic(folderIcon);
             }
         });
