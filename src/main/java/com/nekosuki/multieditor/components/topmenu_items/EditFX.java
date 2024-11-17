@@ -26,7 +26,7 @@ public class EditFX extends Menu {
                 mTab.undo();
             }
             else if (tab instanceof TextTab tTab) {
-                tTab.redo();
+                tTab.undo();
             }
         });
 

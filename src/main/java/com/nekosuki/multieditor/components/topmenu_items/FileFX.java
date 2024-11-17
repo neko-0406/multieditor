@@ -38,7 +38,9 @@ public class FileFX extends Menu {
             if (fileItem != null) {
                 MainApp.getComponents().getCustomTreeView().setRoot(null);
                 MainApp.getComponents().getRootDirTitlePane().setText("");
+                MainApp.getAppConfig().replaceProperty(AppConfig.CURRENT_DIR, "");
                 MainApp.getAppConfig().replaceProperty(AppConfig.LAST_OPEN_DIR, "");
+                MainApp.getAppConfig().writeProperties();
             }
         });
         return item;
@@ -68,12 +70,13 @@ public class FileFX extends Menu {
             fileTreeItem.setExpanded(true);
             MainApp.getComponents().getRootDirTitlePane().setText(file.getName());
             MainApp.getComponents().getCustomTreeView().setRoot(fileTreeItem);
+            MainApp.getAppConfig().writeProperties();
         });
         return item;
     }
 
     private MenuItem saveFile() {
-        MenuItem item = new MenuItem("ファイルの保存");
+        MenuItem item = new MenuItem("保存");
         item.setAccelerator(KeyCombination.valueOf("Ctrl+S"));
         item.setOnAction(event -> {
             TabPane tabPane = MainApp.getComponents().getCustomTabPane();
@@ -87,6 +90,21 @@ public class FileFX extends Menu {
             }
         });
         return item;
+    }
+
+    private MenuItem saveFileAs() {
+        MenuItem menuItem = new MenuItem("名前を付けて保存");
+        menuItem.setAccelerator(KeyCombination.valueOf("Ctrl+Shift+S"));
+        menuItem.setOnAction(event -> {
+            TextInputDialog textInputDialog = new TextInputDialog();
+            textInputDialog.setHeaderText("新しいファイル名を入力");
+            textInputDialog.setContentText("新しいファイル名：");
+            Optional<String> result = textInputDialog.showAndWait();
+            result.ifPresent(name -> {
+
+            });
+        });
+        return menuItem;
     }
 
     private MenuItem newMarkDownFile() {

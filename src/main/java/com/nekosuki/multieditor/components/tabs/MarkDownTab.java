@@ -68,6 +68,8 @@ public class MarkDownTab extends Tab {
             if (file != null && file.exists() && isEdited) {
                 Path filepath = file.toPath();
                 Files.writeString(filepath, codeArea.getText());
+                this.setGraphic(null);
+                isEdited = false;
             }
             else if ((file == null || !file.exists()) && isEdited) {
                 String dirPath = MainApp.getAppConfig().getProperty(AppConfig.CURRENT_DIR, "");
@@ -79,6 +81,8 @@ public class MarkDownTab extends Tab {
                     if (dir != null) {
                         Path filepath = dir.toPath().resolve(getText());
                         Files.writeString(filepath, codeArea.getText());
+                        this.setGraphic(null);
+                        isEdited = false;
                     }
                 }else {
                     CustomTreeView treeView = MainApp.getComponents().getCustomTreeView();
@@ -91,10 +95,10 @@ public class MarkDownTab extends Tab {
                     }
                     FileTreeItem treeItem = new FileTreeItem(new FileItem(new File(dirPath)));
                     treeView.setRoot(treeItem);
+                    this.setGraphic(null);
+                    isEdited = false;
                 }
             }
-            this.setGraphic(null);
-            isEdited = false;
         }catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("ファイルの保存に失敗しました");
