@@ -63,6 +63,7 @@ public class MarkDownTab extends Tab {
     public void redo() {
         codeArea.redo();
     }
+
     public void saveFile() {
         try {
             if (file != null && file.exists() && isEdited) {
