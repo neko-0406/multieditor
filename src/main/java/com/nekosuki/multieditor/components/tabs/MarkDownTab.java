@@ -7,7 +7,6 @@ import com.nekosuki.multieditor.components.treeview.FileItem;
 import com.nekosuki.multieditor.components.treeview.FileTreeItem;
 import com.nekosuki.multieditor.components.treeview.FileType;
 import com.nekosuki.multieditor.markdown.GenerateHTML;
-import com.sun.tools.javac.Main;
 import javafx.scene.control.*;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
@@ -16,11 +15,11 @@ import org.fxmisc.richtext.LineNumberFactory;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MarkDownTab extends Tab {
     private final CodeArea codeArea;
@@ -66,8 +65,12 @@ public class MarkDownTab extends Tab {
         TextInputDialog textInputDialog = new TextInputDialog();
         textInputDialog.setHeaderText("新しいファイル名を入力");
         textInputDialog.setContentText("新しいファイル名：");
+        AtomicReference<Path> resultPath = new AtomicReference<>();
         Optional<String> result = textInputDialog.showAndWait();
         result.ifPresent(name -> {
+            if (!name.endsWith(".md") || !name.endsWith(".markdown")) {
+                name += ".md";
+            }
             CustomTreeView treeView = MainApp.getComponents().getCustomTreeView();
             TreeItem<FileItem> selectItem = treeView.getSelectionModel().getSelectedItem();
             if ( selectItem != null) {
@@ -79,12 +82,21 @@ public class MarkDownTab extends Tab {
                 else{
                     dir = selectItem.getValue().getFile();
                 }
-                Path newPath = dir.toPath().resolve(name);
+                resultPath.set(dir.toPath().resolve(name));
             }else {
                 DirectoryChooser directoryChooser = new DirectoryChooser();
                 directoryChooser.setTitle("ファイルを保存するフォルダを選択");
                 directoryChooser.setInitialDirectory(new File(MainApp.getAppConfig().getProperty(AppConfig.CURRENT_DIR, System.getProperty("user.home"))));
+                File dir = directoryChooser.showDialog(null);
+                if (dir != null)  {
+                    resultPath.set(dir.toPath().resolve(name));
+                }
+            }
 
+            try{
+                Files.writeString(resultPath.get() ,codeArea.getText());
+            }catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
             }
         });
     }

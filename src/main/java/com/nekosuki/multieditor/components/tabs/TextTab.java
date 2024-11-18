@@ -5,8 +5,10 @@ import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.CustomTreeView;
 import com.nekosuki.multieditor.components.treeview.FileItem;
 import com.nekosuki.multieditor.components.treeview.FileTreeItem;
+import com.nekosuki.multieditor.components.treeview.FileType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeItem;
 import javafx.stage.DirectoryChooser;
 import org.fxmisc.richtext.CodeArea;
@@ -20,6 +22,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TextTab extends Tab{
     private final CodeArea codeArea;
@@ -110,7 +114,39 @@ public class TextTab extends Tab{
         }
     }
     public void saveFileAs() {
-
+        TextInputDialog textInputDialog = new TextInputDialog();
+        textInputDialog.setHeaderText("新しいファイル名を入力");
+        textInputDialog.setContentText("新しいファイル名：");
+        AtomicReference<Path> resultPath = new AtomicReference<>();
+        Optional<String> result = textInputDialog.showAndWait();
+        result.ifPresent(name -> {
+            CustomTreeView treeView = MainApp.getComponents().getCustomTreeView();
+            TreeItem<FileItem> selectItem = treeView.getSelectionModel().getSelectedItem();
+            if ( selectItem != null) {
+                com.nekosuki.multieditor.components.treeview.FileType fileType = selectItem.getValue().getFileType();
+                File dir;
+                if (fileType == FileType.FILE){
+                    dir = selectItem.getValue().getFile().getParentFile();
+                }
+                else{
+                    dir = selectItem.getValue().getFile();
+                }
+                resultPath.set(dir.toPath().resolve(name));
+            }else {
+                DirectoryChooser directoryChooser = new DirectoryChooser();
+                directoryChooser.setTitle("ファイルを保存するフォルダを選択");
+                directoryChooser.setInitialDirectory(new File(MainApp.getAppConfig().getProperty(AppConfig.CURRENT_DIR, System.getProperty("user.home"))));
+                File dir = directoryChooser.showDialog(null);
+                if (dir != null)  {
+                    resultPath.set(dir.toPath().resolve(name));
+                }
+            }
+            try{
+                Files.writeString(resultPath.get() ,codeArea.getText());
+            }catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        });
     }
 
     public File getFile() {return file;}

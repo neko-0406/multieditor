@@ -26,6 +26,7 @@ public class FileFX extends Menu {
             newTextFile(),
             newMarkDownFile(),
             saveFile(),
+            saveFileAs(),
             new SeparatorMenuItem(),
             openDir(),
             closeDir()
@@ -96,8 +97,16 @@ public class FileFX extends Menu {
     private MenuItem saveFileAs() {
         MenuItem menuItem = new MenuItem("名前を付けて保存");
         menuItem.setAccelerator(KeyCombination.valueOf("Ctrl+Shift+S"));
-
-
+        menuItem.setOnAction(event -> {
+            TabPane tabPane = MainApp.getComponents().getCustomTabPane();
+            Tab tab = tabPane.getSelectionModel().getSelectedItem();
+            if (tab instanceof MarkDownTab mTab) {
+                mTab.saveFileAs();
+            }
+            else if (tab instanceof TextTab tTab) {
+                tTab.saveFileAs();
+            }
+        });
         return menuItem;
     }
 
