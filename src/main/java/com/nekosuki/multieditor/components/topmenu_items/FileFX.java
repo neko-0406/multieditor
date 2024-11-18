@@ -14,6 +14,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Optional;
 
 public class FileFX extends Menu {
@@ -95,15 +96,8 @@ public class FileFX extends Menu {
     private MenuItem saveFileAs() {
         MenuItem menuItem = new MenuItem("名前を付けて保存");
         menuItem.setAccelerator(KeyCombination.valueOf("Ctrl+Shift+S"));
-        menuItem.setOnAction(event -> {
-            TextInputDialog textInputDialog = new TextInputDialog();
-            textInputDialog.setHeaderText("新しいファイル名を入力");
-            textInputDialog.setContentText("新しいファイル名：");
-            Optional<String> result = textInputDialog.showAndWait();
-            result.ifPresent(name -> {
 
-            });
-        });
+
         return menuItem;
     }
 

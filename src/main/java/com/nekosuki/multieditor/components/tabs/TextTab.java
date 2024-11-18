@@ -109,6 +109,9 @@ public class TextTab extends Tab{
             throw new RuntimeException(e.getMessage());
         }
     }
+    public void saveFileAs() {
+
+    }
 
     public File getFile() {return file;}
 

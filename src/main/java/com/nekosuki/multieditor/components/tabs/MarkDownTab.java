@@ -5,12 +5,10 @@ import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.CustomTreeView;
 import com.nekosuki.multieditor.components.treeview.FileItem;
 import com.nekosuki.multieditor.components.treeview.FileTreeItem;
+import com.nekosuki.multieditor.components.treeview.FileType;
 import com.nekosuki.multieditor.markdown.GenerateHTML;
 import com.sun.tools.javac.Main;
-import javafx.scene.control.Alert;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
 import org.fxmisc.richtext.CodeArea;
@@ -22,6 +20,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 public class MarkDownTab extends Tab {
     private final CodeArea codeArea;
@@ -63,7 +62,32 @@ public class MarkDownTab extends Tab {
     public void redo() {
         codeArea.redo();
     }
+    public void saveFileAs() {
+        TextInputDialog textInputDialog = new TextInputDialog();
+        textInputDialog.setHeaderText("新しいファイル名を入力");
+        textInputDialog.setContentText("新しいファイル名：");
+        Optional<String> result = textInputDialog.showAndWait();
+        result.ifPresent(name -> {
+            CustomTreeView treeView = MainApp.getComponents().getCustomTreeView();
+            TreeItem<FileItem> selectItem = treeView.getSelectionModel().getSelectedItem();
+            if ( selectItem != null) {
+                FileType fileType = selectItem.getValue().getFileType();
+                File dir;
+                if (fileType == FileType.FILE){
+                    dir = selectItem.getValue().getFile().getParentFile();
+                }
+                else{
+                    dir = selectItem.getValue().getFile();
+                }
+                Path newPath = dir.toPath().resolve(name);
+            }else {
+                DirectoryChooser directoryChooser = new DirectoryChooser();
+                directoryChooser.setTitle("ファイルを保存するフォルダを選択");
+                directoryChooser.setInitialDirectory(new File(MainApp.getAppConfig().getProperty(AppConfig.CURRENT_DIR, System.getProperty("user.home"))));
 
+            }
+        });
+    }
     public void saveFile() {
         try {
             if (file != null && file.exists() && isEdited) {
