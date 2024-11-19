@@ -77,6 +77,34 @@ public class FileFX extends Menu {
         return item;
     }
 
+    private MenuItem closeFile() {
+        MenuItem menuItem = new MenuItem("ファイルを閉じる");
+        menuItem.setOnAction(event -> {
+            TabPane tabPane = MainApp.getComponents().getCustomTabPane();
+            Tab tab = tabPane.getSelectionModel().getSelectedItem();
+            boolean isEdit = false;
+            if (tab instanceof MarkDownTab mTab) {
+                isEdit = mTab.isEdited();
+            }
+            else if (tab instanceof TextTab tTab) {
+                isEdit = tTab.isEdited();
+            }
+            else if (tab == null) {
+                event.consume();
+                return;
+            }
+            else {
+
+            }
+
+            if (isEdit) {
+
+            }
+        });
+
+        return menuItem;
+    }
+
     private MenuItem saveFile() {
         MenuItem item = new MenuItem("保存");
         item.setAccelerator(KeyCombination.valueOf("Ctrl+S"));
