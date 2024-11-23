@@ -82,8 +82,7 @@ public class FileTreeItem extends TreeItem<FileItem> {
     private void addChildrenChangeListener(FileTreeItem treeItem) {
         treeItem.getChildren().addListener(new ListChangeListener<TreeItem<FileItem>>() {
             @Override
-            public void onChanged(Change<? extends TreeItem<FileItem>> changeItem) {
-                System.out.println(changeItem);
+            public void onChanged(Change<? extends TreeItem<FileItem>> change) {
             }
         });
     }
