@@ -1,6 +1,7 @@
 package com.nekosuki.multieditor.components.treeview;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -76,5 +77,14 @@ public class FileTreeItem extends TreeItem<FileItem> {
             }
         }
         return FXCollections.emptyObservableList();
+    }
+
+    private void addChildrenChangeListener(FileTreeItem treeItem) {
+        treeItem.getChildren().addListener(new ListChangeListener<TreeItem<FileItem>>() {
+            @Override
+            public void onChanged(Change<? extends TreeItem<FileItem>> changeItem) {
+                System.out.println(changeItem);
+            }
+        });
     }
 }
