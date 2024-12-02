@@ -124,11 +124,15 @@ public class MarkDownTab extends Tab {
                 }else {
                     CustomTreeView treeView = MainApp.getComponents().getCustomTreeView();
                     TreeItem<FileItem> fileItem = treeView.getSelectionModel().getSelectedItem();
+                    Path filepath = null;
                     if (fileItem != null) {
                         File dir = fileItem.getValue().getFile();
                         if (dir.isFile()) dir = dir.getParentFile();
-                        Path filepath = dir.toPath().resolve(getText());
+                        filepath = dir.toPath().resolve(getText());
                         Files.writeString(filepath, codeArea.getText());
+                    }
+                    if (filepath != null) {
+                        FileItem fItem = new FileItem(filepath.toFile());
                     }
                     FileTreeItem treeItem = new FileTreeItem(new FileItem(new File(dirPath)));
                     treeView.setRoot(treeItem);
