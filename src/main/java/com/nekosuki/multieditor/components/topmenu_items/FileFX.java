@@ -7,14 +7,13 @@ import com.nekosuki.multieditor.components.tabs.MarkDownTab;
 import com.nekosuki.multieditor.components.tabs.TextTab;
 import com.nekosuki.multieditor.components.treeview.FileItem;
 import com.nekosuki.multieditor.components.treeview.FileTreeItem;
-import com.sun.tools.javac.Main;
+import com.nekosuki.multieditor.process.file_menu.CloseDirectoryEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.Optional;
 
 public class FileFX extends Menu {
@@ -35,45 +34,14 @@ public class FileFX extends Menu {
 
     private MenuItem closeDir() {
         MenuItem item = new MenuItem("フォルダを閉じる");
-        item.setOnAction(event -> {
-            TreeItem<FileItem> fileItem = MainApp.getComponents().getCustomTreeView().getRoot();
-            if (fileItem != null) {
-                MainApp.getComponents().getCustomTreeView().setRoot(null);
-                MainApp.getComponents().getRootDirTitlePane().setText("");
-                MainApp.getAppConfig().replaceProperty(AppConfig.CURRENT_DIR, "");
-                MainApp.getAppConfig().replaceProperty(AppConfig.LAST_OPEN_DIR, "");
-                MainApp.getAppConfig().writeProperties();
-            }
-        });
+        item.setOnAction(new CloseDirectoryEvent());
         return item;
     }
 
     private MenuItem openDir() {
         MenuItem item = new MenuItem("フォルダを開く");
         item.setAccelerator(KeyCombination.valueOf("Ctrl+O"));
-        item.setOnAction(event -> {
-            DirectoryChooser directoryChooser = new DirectoryChooser();
-            directoryChooser.setTitle("フォルダを選択");
-            String path = MainApp.getAppConfig().getProperty("current_dir", System.getProperty("user.home"));
-            if (path.isEmpty()) path = System.getProperty("user.home");
-            directoryChooser.setInitialDirectory(new File(path));
-
-            File file = directoryChooser.showDialog(null);
-            if (!file.exists()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Folder no found....");
-                alert.setHeaderText("選択されたフォルダが存在していません");
-                alert.setContentText("");
-                alert.show();
-                return;
-            }
-            MainApp.getAppConfig().replaceProperty(AppConfig.CURRENT_DIR, file.getAbsolutePath());
-            FileTreeItem fileTreeItem = new FileTreeItem(new FileItem(file));
-            fileTreeItem.setExpanded(true);
-            MainApp.getComponents().getRootDirTitlePane().setText(file.getName());
-            MainApp.getComponents().getCustomTreeView().setRoot(fileTreeItem);
-            MainApp.getAppConfig().writeProperties();
-        });
+        item.setOnAction(new CloseDirectoryEvent());
         return item;
     }
 

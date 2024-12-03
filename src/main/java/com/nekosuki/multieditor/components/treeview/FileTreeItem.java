@@ -78,12 +78,4 @@ public class FileTreeItem extends TreeItem<FileItem> {
         }
         return FXCollections.emptyObservableList();
     }
-
-    private void addChildrenChangeListener(FileTreeItem treeItem) {
-        treeItem.getChildren().addListener(new ListChangeListener<TreeItem<FileItem>>() {
-            @Override
-            public void onChanged(Change<? extends TreeItem<FileItem>> change) {
-            }
-        });
-    }
 }
