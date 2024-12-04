@@ -36,7 +36,7 @@ public class TextTab extends Tab{
         codeArea = new CodeArea();
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         this.setContent(codeArea);
-
+        file = null;
         addEventListener();
     }
 

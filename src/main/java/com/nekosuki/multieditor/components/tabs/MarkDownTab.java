@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MarkDownTab extends Tab {
     private final CodeArea codeArea;
     private final WebView webView;
-    private File file;
+    private final File file;
     private boolean isEdited;
     private final static GenerateHTML generateHtml = new GenerateHTML();
 
@@ -37,6 +37,7 @@ public class MarkDownTab extends Tab {
         splitPane.getItems().addAll(codeArea,webView);
         this.setContent(splitPane);
         isEdited = false;
+        this.file = null;
         addEventListener();
     }
 

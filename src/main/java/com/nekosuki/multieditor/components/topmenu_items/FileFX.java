@@ -8,6 +8,7 @@ import com.nekosuki.multieditor.components.tabs.TextTab;
 import com.nekosuki.multieditor.components.treeview.FileItem;
 import com.nekosuki.multieditor.components.treeview.FileTreeItem;
 import com.nekosuki.multieditor.process.file_menu.CloseDirectoryEvent;
+import com.nekosuki.multieditor.process.file_menu.CloseFileEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.DirectoryChooser;
@@ -26,6 +27,7 @@ public class FileFX extends Menu {
             newMarkDownFile(),
             saveFile(),
             saveFileAs(),
+            closeFile(),
             new SeparatorMenuItem(),
             openDir(),
             closeDir()
@@ -47,29 +49,7 @@ public class FileFX extends Menu {
 
     private MenuItem closeFile() {
         MenuItem menuItem = new MenuItem("ファイルを閉じる");
-        menuItem.setOnAction(event -> {
-            TabPane tabPane = MainApp.getComponents().getCustomTabPane();
-            Tab tab = tabPane.getSelectionModel().getSelectedItem();
-            boolean isEdit = false;
-            if (tab instanceof MarkDownTab mTab) {
-                isEdit = mTab.isEdited();
-            }
-            else if (tab instanceof TextTab tTab) {
-                isEdit = tTab.isEdited();
-            }
-            else if (tab == null) {
-                event.consume();
-                return;
-            }
-            else {
-
-            }
-
-            if (isEdit) {
-
-            }
-        });
-
+        menuItem.setOnAction(new CloseFileEvent());
         return menuItem;
     }
 
