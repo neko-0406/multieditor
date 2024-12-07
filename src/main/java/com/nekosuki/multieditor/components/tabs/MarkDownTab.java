@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MarkDownTab extends Tab {
+public class MarkDownTab extends Tab implements ITextTab {
     private final CodeArea codeArea;
     private final WebView webView;
     private final File file;
@@ -149,6 +149,7 @@ public class MarkDownTab extends Tab {
         }
     }
 
+    @Override
     public boolean isEdited() {return isEdited;}
 
     private void addEventListener() {
@@ -182,6 +183,7 @@ public class MarkDownTab extends Tab {
         return sb.toString();
     }
 
+    @Override
     public File getFile() {return file;}
 
 
