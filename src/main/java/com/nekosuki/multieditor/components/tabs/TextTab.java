@@ -25,7 +25,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class TextTab extends Tab{
+public class TextTab extends Tab implements ITextTab {
     private final CodeArea codeArea;
     private boolean isEdited;
     private File file;
@@ -69,6 +69,7 @@ public class TextTab extends Tab{
     public void redo() {
         codeArea.redo();
     }
+    @Override
     public boolean isEdited() {return isEdited;}
     public void saveFile() {
         try {
@@ -149,6 +150,7 @@ public class TextTab extends Tab{
         });
     }
 
+    @Override
     public File getFile() {return file;}
 
     private static String readFile(File file) {
