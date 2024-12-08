@@ -45,6 +45,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.18.2'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.18.2'
 
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+
     implementation('com.dlsc.formsfx:formsfx-core:11.6.0') {
         exclude group: 'org.openjfx'
     }

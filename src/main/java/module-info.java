@@ -22,6 +22,8 @@ module com.nekosuki.multieditor {
     requires org.kordamp.ikonli.core;
     requires org.jetbrains.annotations;
     requires jdk.compiler;
+    requires static lombok;
+    requires com.fasterxml.jackson.databind;
 
     opens com.nekosuki.multieditor to javafx.fxml;
     exports com.nekosuki.multieditor;
