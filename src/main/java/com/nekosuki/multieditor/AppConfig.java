@@ -61,4 +61,10 @@ public class AppConfig {
         return properties;
     }
 
+    @Override
+    public String toString() {
+        return "AppConfig{" +
+                "properties=" + properties +
+                '}';
+    }
 }

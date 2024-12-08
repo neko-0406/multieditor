@@ -27,7 +27,9 @@ module com.nekosuki.multieditor {
     exports com.nekosuki.multieditor;
     exports com.nekosuki.multieditor.components;
     exports com.nekosuki.multieditor.components.topmenu_items;
+    exports com.nekosuki.multieditor.components.popup;
     exports com.nekosuki.multieditor.markdown;
     exports com.nekosuki.multieditor.components.treeview;
     opens com.nekosuki.multieditor.markdown to javafx.fxml;
+    opens com.nekosuki.multieditor.components.popup to javafx.fxml;
 }

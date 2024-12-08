@@ -63,6 +63,8 @@ public class MainApp extends Application {
             appConfig.replaceProperty(AppConfig.CURRENT_DIR, dirPath);
             appConfig.replaceProperty(AppConfig.LAST_OPEN_DIR, "");
         }
+        System.out.println("↓");
+        System.out.println(appConfig.getProperty(AppConfig.CURRENT_DIR, "None"));
     }
 
     private String getStyleSheetPath(String theme) {

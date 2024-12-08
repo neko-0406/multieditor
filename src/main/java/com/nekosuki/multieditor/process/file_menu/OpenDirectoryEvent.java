@@ -43,7 +43,5 @@ public class OpenDirectoryEvent implements EventHandler<ActionEvent> {
         titledPane.setText(file.getName());
         treeView.setRoot(fItem);
         appConfig.writeProperties();
-
-
     }
 }

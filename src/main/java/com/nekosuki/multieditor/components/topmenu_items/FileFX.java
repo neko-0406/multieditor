@@ -9,6 +9,7 @@ import com.nekosuki.multieditor.components.treeview.FileItem;
 import com.nekosuki.multieditor.components.treeview.FileTreeItem;
 import com.nekosuki.multieditor.process.file_menu.CloseDirectoryEvent;
 import com.nekosuki.multieditor.process.file_menu.CloseFileEvent;
+import com.nekosuki.multieditor.process.file_menu.OpenDirectoryEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.DirectoryChooser;
@@ -43,7 +44,7 @@ public class FileFX extends Menu {
     private MenuItem openDir() {
         MenuItem item = new MenuItem("フォルダを開く");
         item.setAccelerator(KeyCombination.valueOf("Ctrl+O"));
-        item.setOnAction(new CloseDirectoryEvent());
+        item.setOnAction(new OpenDirectoryEvent());
         return item;
     }
 

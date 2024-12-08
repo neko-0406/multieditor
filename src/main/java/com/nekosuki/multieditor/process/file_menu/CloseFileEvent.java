@@ -3,8 +3,8 @@ package com.nekosuki.multieditor.process.file_menu;
 import com.nekosuki.multieditor.AppConfig;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.CustomTabPane;
-import com.nekosuki.multieditor.components.tabs.MarkDownTab;
-import com.nekosuki.multieditor.components.tabs.TextTab;
+import com.nekosuki.multieditor.components.popup.CloseFileAlertDialog;
+import com.nekosuki.multieditor.components.tabs.ITextTab;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -24,31 +24,20 @@ public class CloseFileEvent implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         CustomTabPane tabPane = MainApp.getComponents().getCustomTabPane();
         Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
-        File file = null;
-        boolean isEdited = false;
+        File file;
+        boolean isEdited;
+        new CloseFileAlertDialog();
 
-        if (selectedTab instanceof MarkDownTab mTab) {
-            file = mTab.getFile();
-            isEdited = mTab.isEdited();
-        }
-        else if (selectedTab instanceof TextTab tTab) {
-            file = tTab.getFile();
-            isEdited = tTab.isEdited();
-        }
+        if (selectedTab instanceof ITextTab iTab) {
+            file = iTab.getFile();
+            isEdited = iTab.isEdited();
+        } else return;
 
-        if (isEdited) {  // 未編集
-            tabPane.getTabs().remove(selectedTab);
-        }
-        else {  // 編集済み
-            if (file != null) {  // ファイルあり
+        if (file != null && isEdited) {
 
-            }
-            else {  // ファイルなし
-
-            }
         }
-        showWarningDialog();
     }
+
 
     private void showWarningDialog() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
