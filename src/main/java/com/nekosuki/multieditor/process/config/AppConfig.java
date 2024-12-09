@@ -23,32 +23,4 @@ public class AppConfig {
     @JsonProperty("dir")
     private Directory directory;
     //-------------------------------
-
-    public static AppConfig loadConfigFile() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        AppConfig appConfig;
-        File file = new File("./AppConfig.json");
-
-        try{
-            appConfig = objectMapper.readValue(file, AppConfig.class);
-        }catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-
-        return appConfig;
-    }
-
-    public static boolean StoreAppConfig(AppConfig appConfig) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        File file = new File("./AppConfig.json");
-
-        try{
-            objectMapper.writeValue(file, appConfig);
-        }catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-
-        return true;
-    }
 }
