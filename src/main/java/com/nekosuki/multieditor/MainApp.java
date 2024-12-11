@@ -3,17 +3,23 @@ package com.nekosuki.multieditor;
 import com.nekosuki.multieditor.components.*;
 import com.nekosuki.multieditor.components.treeview.FileItem;
 import com.nekosuki.multieditor.components.treeview.FileTreeItem;
+import com.nekosuki.multieditor.process.config.AppConfig;
+import com.nekosuki.multieditor.process.config.AppConfigManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import lombok.Getter;
 
 import java.io.File;
 import java.util.Objects;
 
 public class MainApp extends Application {
 
+    @Getter
     private static Components components = null;
+
+    @Getter
     private static AppConfig appConfig = null;
 
     public static void main(String...arts) {
@@ -22,29 +28,33 @@ public class MainApp extends Application {
 
     @Override
     public void init() {
-        appConfig = new AppConfig();
+        appConfig = AppConfigManager.getAppConfig();
     }
 
     @Override
     public void start(Stage primaryStage) {
         components = new Components();
+
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(components.getMenuBar());
         borderPane.setCenter(components.getSplitter());
         borderPane.setLeft(components.getSideMenuBar());
         borderPane.setBottom(components.getStatusBar());
 
-        String styleTheme = appConfig.getProperty(AppConfig.DISPLAY_THEME, "light");
+        String styleTheme = appConfig.getRoot().getTheme();
         Scene scene = new Scene(borderPane, 1200, 800);
         scene.getStylesheets().add(getStyleSheetPath(styleTheme));
+
 
         primaryStage.setScene(scene);
         primaryStage.showingProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue && !newValue) {
-                String currentPath = appConfig.getProperty(AppConfig.CURRENT_DIR, "");
-                if (!currentPath.isEmpty()) appConfig.replaceProperty(AppConfig.LAST_OPEN_DIR, currentPath);
-                appConfig.replaceProperty(AppConfig.CURRENT_DIR, "");
-                appConfig.writeProperties();
+                String currentPath = appConfig.getDirectory().getCurrentDir();
+                if (!currentPath.isEmpty()) {
+                    appConfig.getDirectory().setLastOpenDir(currentPath);
+                    appConfig.getDirectory().setCurrentDir("");
+                }
+                AppConfigManager.storeConfig();
             }
         });
         appInit();
@@ -52,7 +62,7 @@ public class MainApp extends Application {
     }
 
     private void appInit() {
-        String dirPath = appConfig.getProperty(AppConfig.LAST_OPEN_DIR, "");
+        String dirPath = appConfig.getDirectory().getLastOpenDir();
         File dir = new File(dirPath);
         if (dir.exists()) {
             FileTreeItem treeItem = new FileTreeItem(new FileItem(dir));
@@ -60,11 +70,10 @@ public class MainApp extends Application {
             components.getCustomTreeView().setRoot(treeItem);
             components.getRootDirTitlePane().setText(dir.getName());
 
-            appConfig.replaceProperty(AppConfig.CURRENT_DIR, dirPath);
-            appConfig.replaceProperty(AppConfig.LAST_OPEN_DIR, "");
+            appConfig.getDirectory().setCurrentDir(dirPath);
+            appConfig.getDirectory().setLastOpenDir("");
+            AppConfigManager.storeConfig();
         }
-        System.out.println("↓");
-        System.out.println(appConfig.getProperty(AppConfig.CURRENT_DIR, "None"));
     }
 
     private String getStyleSheetPath(String theme) {
@@ -82,7 +91,4 @@ public class MainApp extends Application {
 
         return styleSheetPath;
     }
-
-    public static Components getComponents() { return components; }
-    public static AppConfig getAppConfig() { return appConfig; }
 }

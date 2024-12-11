@@ -1,9 +1,11 @@
 {
   "root": {
-    "clickCount": 2
+    "clickCount": 2,
+    "theme": "light"
   },
   "codeArea": {
-    "textSize": 12
+    "textSize": 12,
+    "theme": "light"
   },
   "dir": {
     "current": "",

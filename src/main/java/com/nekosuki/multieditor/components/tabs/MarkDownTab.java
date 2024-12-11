@@ -1,6 +1,5 @@
 package com.nekosuki.multieditor.components.tabs;
 
-import com.nekosuki.multieditor.AppConfig;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.CustomTreeView;
 import com.nekosuki.multieditor.components.treeview.FileItem;

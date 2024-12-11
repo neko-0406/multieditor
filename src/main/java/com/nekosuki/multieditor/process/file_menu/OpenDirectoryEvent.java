@@ -1,9 +1,10 @@
 package com.nekosuki.multieditor.process.file_menu;
 
-import com.nekosuki.multieditor.AppConfig;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.treeview.FileItem;
 import com.nekosuki.multieditor.components.treeview.FileTreeItem;
+import com.nekosuki.multieditor.process.config.AppConfig;
+import com.nekosuki.multieditor.process.config.AppConfigManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -24,7 +25,8 @@ public class OpenDirectoryEvent implements EventHandler<ActionEvent> {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("フォルダを開く");
         String homePath = System.getProperty("user.home");
-        String dirPath = appConfig.getProperty(AppConfig.CURRENT_DIR, homePath);
+        String currentPath = MainApp.getAppConfig().getDirectory().getCurrentDir();
+        String dirPath = !currentPath.isEmpty() ? currentPath : homePath;
         chooser.setInitialDirectory(new File(dirPath));
 
         File file = chooser.showDialog(null);
@@ -37,11 +39,11 @@ public class OpenDirectoryEvent implements EventHandler<ActionEvent> {
             return;
         }
 
-        appConfig.replaceProperty(AppConfig.CURRENT_DIR, file.getAbsolutePath());
+        appConfig.getDirectory().setCurrentDir(file.getAbsolutePath());
         FileTreeItem fItem = new FileTreeItem(new FileItem(file));
         fItem.setExpanded(true);
         titledPane.setText(file.getName());
         treeView.setRoot(fItem);
-        appConfig.writeProperties();
+        AppConfigManager.storeConfig();
     }
 }

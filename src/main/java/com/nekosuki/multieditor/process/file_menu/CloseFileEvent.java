@@ -1,6 +1,5 @@
 package com.nekosuki.multieditor.process.file_menu;
 
-import com.nekosuki.multieditor.AppConfig;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.CustomTabPane;
 import com.nekosuki.multieditor.components.popup.CloseFileAlertDialog;
@@ -57,8 +56,18 @@ public class CloseFileEvent implements EventHandler<ActionEvent> {
     private File openDirDialog() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("保存するフォルダを選択");
-        String selectPath = MainApp.getAppConfig().getProperty(AppConfig.CURRENT_DIR, System.getProperty("user.home"));
-        directoryChooser.setInitialDirectory(new File(selectPath));
+
+        String currentPath = MainApp.getAppConfig().getDirectory().getCurrentDir();
+        File file;
+
+        if (currentPath.isEmpty()) {
+            file = new File(System.getProperty("user.home"));
+        }
+        else {
+            file = new File(currentPath);
+        }
+
+        directoryChooser.setInitialDirectory(file);
 
         File dir = directoryChooser.showDialog(null);
         if (dir != null) {  // フォルダ選択

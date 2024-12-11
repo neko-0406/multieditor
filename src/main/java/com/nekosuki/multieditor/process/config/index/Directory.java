@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Directory {
+public class Directory implements ConfigIndex{
 
     @JsonProperty("current")
     private String currentDir;

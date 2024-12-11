@@ -1,6 +1,5 @@
 package com.nekosuki.multieditor.components;
 
-import com.nekosuki.multieditor.AppConfig;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.tabs.FileType;
 import com.nekosuki.multieditor.components.tabs.MarkDownTab;
