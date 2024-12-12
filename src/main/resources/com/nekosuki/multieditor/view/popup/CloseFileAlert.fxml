@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="131.0" prefWidth="363.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nekosuki.multieditor.components.popup.CloseFileAlertDialogController">
+<AnchorPane prefHeight="131.0" prefWidth="363.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="21.0" layoutY="22.0" prefHeight="50.0" prefWidth="317.0" text="ファイルが保存されていません。保存してから閉じますか？">
          <font>

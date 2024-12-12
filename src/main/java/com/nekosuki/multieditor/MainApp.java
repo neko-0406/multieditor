@@ -4,7 +4,6 @@ import com.nekosuki.multieditor.components.*;
 import com.nekosuki.multieditor.components.treeview.FileItem;
 import com.nekosuki.multieditor.components.treeview.FileTreeItem;
 import com.nekosuki.multieditor.process.config.AppConfig;
-import com.nekosuki.multieditor.process.config.AppConfigManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -28,7 +27,7 @@ public class MainApp extends Application {
 
     @Override
     public void init() {
-        appConfig = AppConfigManager.getAppConfig();
+        appConfig = AppConfig.loadAppConfig();
     }
 
     @Override
@@ -54,7 +53,7 @@ public class MainApp extends Application {
                     appConfig.getDirectory().setLastOpenDir(currentPath);
                     appConfig.getDirectory().setCurrentDir("");
                 }
-                AppConfigManager.storeConfig();
+                appConfig.storeConfig();
             }
         });
         appInit();
@@ -72,7 +71,7 @@ public class MainApp extends Application {
 
             appConfig.getDirectory().setCurrentDir(dirPath);
             appConfig.getDirectory().setLastOpenDir("");
-            AppConfigManager.storeConfig();
+            appConfig.storeConfig();
         }
     }
 

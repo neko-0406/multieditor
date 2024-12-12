@@ -3,11 +3,13 @@ package com.nekosuki.multieditor.process.file_menu;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.CustomTabPane;
 import com.nekosuki.multieditor.components.popup.CloseFileAlertDialog;
-import com.nekosuki.multieditor.components.tabs.ITextTab;
+import com.nekosuki.multieditor.components.popup.ResultType;
+import com.nekosuki.multieditor.components.tabs.MarkDownTab;
+import com.nekosuki.multieditor.components.tabs.TextTab;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tab;
 import javafx.stage.DirectoryChooser;
 
@@ -23,29 +25,69 @@ public class CloseFileEvent implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         CustomTabPane tabPane = MainApp.getComponents().getCustomTabPane();
         Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+
         File file;
+        String value;
         boolean isEdited;
-        new CloseFileAlertDialog();
 
-        if (selectedTab instanceof ITextTab iTab) {
-            file = iTab.getFile();
-            isEdited = iTab.isEdited();
-        } else return;
-
-        if (file != null && isEdited) {
-
+        if (selectedTab instanceof MarkDownTab mTab) {
+            file = mTab.getFile();
+            isEdited = mTab.isEdited();
+            value = mTab.getCodeArea().getText();
         }
+        else if (selectedTab instanceof TextTab tTab) {
+            file = tTab.getFile();
+            isEdited = tTab.isEdited();
+            value = tTab.getCodeArea().getText();
+        }
+        else {
+            ObservableList<Tab> tabs = tabPane.getTabs();
+            tabs.remove(selectedTab);
+            return;
+        }
+
+        if (isEdited) {
+            CloseFileAlertDialog dialog = new CloseFileAlertDialog();
+            ResultType type = dialog.showAndWait();
+
+            if (type == ResultType.YES) {
+                if (file.exists()) {
+                    boolean isSuccess = writeValue(file.toPath(), value);
+                    if (!isSuccess) {
+                        displayErrorDialog();
+                    }
+                    else {
+                        ObservableList<Tab> tabs = tabPane.getTabs();
+                        tabs.remove(selectedTab);
+                    }
+                }
+                else {
+                    File saveDir = openDirDialog();
+                    if (saveDir != null){
+                        String fileName = selectedTab.getText();
+                        Path filePath = saveDir.toPath().resolve(fileName);
+                        writeValue(filePath, value);
+                        ObservableList<Tab> tabs = tabPane.getTabs();
+                        tabs.remove(selectedTab);
+                    }
+                }
+            }else if (type == ResultType.NO) {
+                ObservableList<Tab> tabs = tabPane.getTabs();
+                tabs.remove(selectedTab);
+            }
+        }
+
+
+
+
     }
 
-
-    private void showWarningDialog() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setHeaderText("ファイルが保存されていません!");
-        alert.setContentText("ファイルを保存してから閉じますか?");
-        alert.getButtonTypes().clear();
-        ButtonType yesButton = new ButtonType("はい");
-        ButtonType noButton = ButtonType.NO;
-        alert.getButtonTypes().addAll(yesButton, noButton);
+    /**
+     * ファイルの保存失敗をアラートするだけ
+     */
+    private void displayErrorDialog() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("ファイルの保存に失敗しました。");
         alert.showAndWait();
     }
 

@@ -20,7 +20,7 @@ public class CustomTreeView extends TreeView<FileItem> {
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.setShowRoot(false);
         this.setOnMouseClicked(event -> {
-            int configCount = Integer.parseInt(MainApp.getAppConfig().getProperty(AppConfig.CLICK_COUNT, "2"));
+            int configCount = MainApp.getAppConfig().getRoot().getClickCount();
             if (event.getClickCount() == configCount) {
                 FileTreeItem item = (FileTreeItem) getSelectionModel().getSelectedItem();
                 if (item == null) return;

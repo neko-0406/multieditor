@@ -9,6 +9,7 @@ import com.nekosuki.multieditor.markdown.GenerateHTML;
 import javafx.scene.control.*;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
+import lombok.Getter;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -21,8 +22,11 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MarkDownTab extends Tab implements ITextTab {
+    @Getter
     private final CodeArea codeArea;
     private final WebView webView;
+
+    @Getter
     private final File file;
     private boolean isEdited;
     private final static GenerateHTML generateHtml = new GenerateHTML();
@@ -54,98 +58,6 @@ public class MarkDownTab extends Tab implements ITextTab {
         codeArea.replaceText(markdown);
         loadHtml(markdown);
         addEventListener();
-    }
-    public void undo() {
-        codeArea.undo();
-    }
-    public void redo() {
-        codeArea.redo();
-    }
-    public void saveFileAs() {
-        TextInputDialog textInputDialog = new TextInputDialog();
-        textInputDialog.setHeaderText("新しいファイル名を入力");
-        textInputDialog.setContentText("新しいファイル名：");
-        AtomicReference<Path> resultPath = new AtomicReference<>();
-        Optional<String> result = textInputDialog.showAndWait();
-        result.ifPresent(name -> {
-            if (!name.endsWith(".md") || !name.endsWith(".markdown")) {
-                name += ".md";
-            }
-            CustomTreeView treeView = MainApp.getComponents().getCustomTreeView();
-            TreeItem<FileItem> selectItem = treeView.getSelectionModel().getSelectedItem();
-            if ( selectItem != null) {
-                FileType fileType = selectItem.getValue().getFileType();
-                File dir;
-                if (fileType == FileType.FILE){
-                    dir = selectItem.getValue().getFile().getParentFile();
-                }
-                else{
-                    dir = selectItem.getValue().getFile();
-                }
-                resultPath.set(dir.toPath().resolve(name));
-            }else {
-                DirectoryChooser directoryChooser = new DirectoryChooser();
-                directoryChooser.setTitle("ファイルを保存するフォルダを選択");
-                directoryChooser.setInitialDirectory(new File(MainApp.getAppConfig().getProperty(AppConfig.CURRENT_DIR, System.getProperty("user.home"))));
-                File dir = directoryChooser.showDialog(null);
-                if (dir != null)  {
-                    resultPath.set(dir.toPath().resolve(name));
-                }
-            }
-
-            try{
-                Files.writeString(resultPath.get() ,codeArea.getText());
-            }catch (IOException e) {
-                throw new RuntimeException(e.getMessage());
-            }
-        });
-    }
-    public void saveFile() {
-        try {
-            if (file != null && file.exists() && isEdited) {
-                Path filepath = file.toPath();
-                Files.writeString(filepath, codeArea.getText());
-                this.setGraphic(null);
-                isEdited = false;
-            }
-            else if ((file == null || !file.exists()) && isEdited) {
-                String dirPath = MainApp.getAppConfig().getProperty(AppConfig.CURRENT_DIR, "");
-                if (dirPath.isEmpty()) {  // フォルダを開いていない場合
-                    DirectoryChooser chooser = new DirectoryChooser();
-                    chooser.setTitle("保存するフォルダを選択");
-                    chooser.setInitialDirectory(new File(System.getProperty("user.home")));
-                    File dir = chooser.showDialog(null);
-                    if (dir != null) {
-                        Path filepath = dir.toPath().resolve(getText());
-                        Files.writeString(filepath, codeArea.getText());
-                        this.setGraphic(null);
-                        isEdited = false;
-                    }
-                }else {
-                    CustomTreeView treeView = MainApp.getComponents().getCustomTreeView();
-                    TreeItem<FileItem> fileItem = treeView.getSelectionModel().getSelectedItem();
-                    Path filepath = null;
-                    if (fileItem != null) {
-                        File dir = fileItem.getValue().getFile();
-                        if (dir.isFile()) dir = dir.getParentFile();
-                        filepath = dir.toPath().resolve(getText());
-                        Files.writeString(filepath, codeArea.getText());
-                    }
-                    if (filepath != null) {
-                        FileItem fItem = new FileItem(filepath.toFile());
-                    }
-                    FileTreeItem treeItem = new FileTreeItem(new FileItem(new File(dirPath)));
-                    treeView.setRoot(treeItem);
-                    this.setGraphic(null);
-                    isEdited = false;
-                }
-            }
-        }catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("ファイルの保存に失敗しました");
-            alert.show();
-            throw new RuntimeException(e.getMessage());
-        }
     }
 
     @Override
@@ -181,9 +93,4 @@ public class MarkDownTab extends Tab implements ITextTab {
 
         return sb.toString();
     }
-
-    @Override
-    public File getFile() {return file;}
-
-
 }

@@ -13,33 +13,36 @@ import java.io.IOException;
 import java.net.URL;
 
 public class CloseFileAlertDialog {
-    private CloseFileAlertDialogController.ResultType resultType;
     private final Stage modalStage;
 
     public CloseFileAlertDialog() {
         this.modalStage = new Stage();
-        showAndWait();
     }
 
-
-    public void showAndWait() {
+    public ResultType showAndWait() {
+        ResultType resultType;
         try {
-            AnchorPane root = FXMLLoader.load(getFxmlURL());
+            CloseFileAlertDialogController controller = new CloseFileAlertDialogController();
+            FXMLLoader loader = new FXMLLoader(getFxmlURL());
+            loader.setController(controller);
+
+            AnchorPane root = loader.load();
             Scene scene = new Scene(root);
             modalStage.setScene(scene);
             modalStage.initModality(Modality.APPLICATION_MODAL);
             modalStage.showAndWait();
-
+            resultType = controller.getResult();
         }catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
+
+        return resultType;
     }
 
     private URL getFxmlURL() {
         URL fxmlUrl;
         try {
             fxmlUrl = MainApp.class.getResource("view/popup/CloseFileAlert.fxml");
-            System.out.println(fxmlUrl);
         }catch (NullPointerException e) {
             throw new RuntimeException(e.getMessage());
         }

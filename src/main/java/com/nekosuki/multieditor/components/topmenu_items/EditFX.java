@@ -22,12 +22,6 @@ public class EditFX extends Menu {
         item.setAccelerator(KeyCombination.valueOf("Ctrl+Z"));
         item.setOnAction(event -> {
             Tab tab = MainApp.getComponents().getCustomTabPane().getSelectionModel().getSelectedItem();
-            if (tab instanceof MarkDownTab mTab) {
-                mTab.undo();
-            }
-            else if (tab instanceof TextTab tTab) {
-                tTab.undo();
-            }
         });
 
         return item;
@@ -38,12 +32,6 @@ public class EditFX extends Menu {
         item.setAccelerator(KeyCombination.valueOf("Ctrl+Y"));
         item.setOnAction(event -> {
             Tab tab = MainApp.getComponents().getCustomTabPane().getSelectionModel().getSelectedItem();
-            if (tab instanceof MarkDownTab mTab) {
-                mTab.redo();
-            }
-            else if (tab instanceof TextTab tTab) {
-                tTab.redo();
-            }
         });
 
         return item;

@@ -4,7 +4,6 @@ import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.treeview.FileItem;
 import com.nekosuki.multieditor.components.treeview.FileTreeItem;
 import com.nekosuki.multieditor.process.config.AppConfig;
-import com.nekosuki.multieditor.process.config.AppConfigManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -44,6 +43,6 @@ public class OpenDirectoryEvent implements EventHandler<ActionEvent> {
         fItem.setExpanded(true);
         titledPane.setText(file.getName());
         treeView.setRoot(fItem);
-        AppConfigManager.storeConfig();
+        appConfig.storeConfig();
     }
 }

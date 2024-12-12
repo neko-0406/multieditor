@@ -1,6 +1,7 @@
 package com.nekosuki.multieditor.markdown;
 
 import com.nekosuki.multieditor.MainApp;
+import com.sun.tools.javac.Main;
 import com.vladsch.flexmark.ext.autolink.AutolinkExtension;
 import com.vladsch.flexmark.ext.footnotes.FootnoteExtension;
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
@@ -57,7 +58,11 @@ public class GenerateHTML {
     }
 
     public String genHtmlTextsFromMarkDown(String text) {
-        String baseUrl = MainApp.getAppConfig().getProperty("current_dir", System.getProperty("user.home"));
+        String baseUrl = MainApp.getAppConfig().getDirectory().getCurrentDir();
+        if (baseUrl.isEmpty()) {
+            baseUrl = System.getProperty("user.home");
+        }
+
         String css = getAppThemeCss();
         Document document = parser.parse(text);
         String html = renderer.render(document);
@@ -66,24 +71,29 @@ public class GenerateHTML {
     }
 
     private String getAppThemeCss() {
-       String theme = MainApp.getAppConfig().getProperty("display_theme", "light");
-       StringBuilder cssTexts = new StringBuilder();
-       InputStream data;
-       if (theme.equals("light")) {
-           data = Objects.requireNonNull(MainApp.class.getResourceAsStream("md_light.css"));
-       }else {
-           data = Objects.requireNonNull(MainApp.class.getResourceAsStream("md_dark.css"));
-       }
 
-       try(BufferedReader br = new BufferedReader(new InputStreamReader(data, Charset.defaultCharset()))) {
-           String line;
-           while((line = br.readLine()) != null) {
-               cssTexts.append(line);
-           }
-       } catch (IOException e) {
-           throw new RuntimeException(e);
-       }
+        String theme = MainApp.getAppConfig().getCodeArea().getTheme();
+        if (theme.isEmpty()) {
+            theme = "light";
+        }
 
-       return cssTexts.toString();
+        StringBuilder cssTexts = new StringBuilder();
+        InputStream data;
+        if (theme.equals("light")) {
+            data = Objects.requireNonNull(MainApp.class.getResourceAsStream("md_light.css"));
+        }else {
+            data = Objects.requireNonNull(MainApp.class.getResourceAsStream("md_dark.css"));
+        }
+
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(data, Charset.defaultCharset()))) {
+            String line;
+            while((line = br.readLine()) != null) {
+                cssTexts.append(line);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return cssTexts.toString();
     }
 }

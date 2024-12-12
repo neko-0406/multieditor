@@ -16,12 +16,13 @@ public class CloseFileAlertDialogController implements Initializable {
 
     private ResultType resultType = ResultType.CANCEL;
 
-    @FXML private Label label;
     @FXML private Button yesButton;
     @FXML private Button noButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        resultType = ResultType.CANCEL;
+
         yesButton.setOnAction(event -> {
             resultType = ResultType.YES;
             closeDialog();
@@ -40,9 +41,5 @@ public class CloseFileAlertDialogController implements Initializable {
 
     public ResultType getResult() {
         return resultType;
-    }
-
-    public enum ResultType {
-        YES, NO, CANCEL
     }
 }

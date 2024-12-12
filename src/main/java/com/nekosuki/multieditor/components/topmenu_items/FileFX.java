@@ -54,15 +54,6 @@ public class FileFX extends Menu {
         MenuItem item = new MenuItem("保存");
         item.setAccelerator(KeyCombination.valueOf("Ctrl+S"));
         item.setOnAction(event -> {
-            TabPane tabPane = MainApp.getComponents().getCustomTabPane();
-            Tab tab = tabPane.getSelectionModel().getSelectedItem();
-
-            if (tab instanceof MarkDownTab mTab) {
-                mTab.saveFile();
-            }
-            else if (tab instanceof TextTab tTab) {
-                tTab.saveFile();
-            }
         });
         return item;
     }
@@ -71,14 +62,6 @@ public class FileFX extends Menu {
         MenuItem menuItem = new MenuItem("名前を付けて保存");
         menuItem.setAccelerator(KeyCombination.valueOf("Ctrl+Shift+S"));
         menuItem.setOnAction(event -> {
-            TabPane tabPane = MainApp.getComponents().getCustomTabPane();
-            Tab tab = tabPane.getSelectionModel().getSelectedItem();
-            if (tab instanceof MarkDownTab mTab) {
-                mTab.saveFileAs();
-            }
-            else if (tab instanceof TextTab tTab) {
-                tTab.saveFileAs();
-            }
         });
         return menuItem;
     }

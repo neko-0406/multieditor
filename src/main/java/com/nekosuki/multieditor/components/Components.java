@@ -2,7 +2,9 @@ package com.nekosuki.multieditor.components;
 
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
+import lombok.Getter;
 
+@Getter
 public class Components {
     private final Splitter splitter;
     private final SideMenuBar sideMenuBar;
@@ -24,34 +26,6 @@ public class Components {
         rootDirTitlePane = new TitledPane();
 
         readySplitter();
-    }
-
-    public CustomTreeView getCustomTreeView() {return customTreeView;}
-
-    public Splitter getSplitter() {
-        return splitter;
-    }
-
-    public SideMenuBar getSideMenuBar() {
-        return sideMenuBar;
-    }
-
-    public StatusBar getStatusBar() {
-        return statusBar;
-    }
-
-    public CustomTabPane getCustomTabPane() {
-        return customTabPane;
-    }
-
-    public DisplaySideMenuArea getDisplaySideMenuArea() {
-        return displaySideMenuArea;
-    }
-
-    public TitledPane getRootDirTitlePane() {return rootDirTitlePane;}
-
-    public MenuBar getMenuBar() {
-        return menuBar;
     }
 
     private void readySplitter() {
