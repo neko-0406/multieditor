@@ -16,6 +16,7 @@ import javafx.stage.DirectoryChooser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -135,7 +136,7 @@ public class CloseFileEvent implements EventHandler<ActionEvent> {
         boolean isSuccess = true;
 
         try {
-            Files.writeString(path, value, Charset.defaultCharset());
+            Files.writeString(path, value, StandardCharsets.UTF_8);
         }catch (IOException e) {
             isSuccess = false;
         }

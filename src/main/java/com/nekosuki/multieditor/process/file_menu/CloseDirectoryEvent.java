@@ -26,10 +26,6 @@ public class CloseDirectoryEvent implements EventHandler<ActionEvent> {
             appConfig.getDirectory().setCurrentDir("");
             appConfig.getDirectory().setLastOpenDir("");
             appConfig.storeConfig();
-
-//            appConfig.replaceProperty(AppConfig.CURRENT_DIR, "");
-//            appConfig.replaceProperty(AppConfig.LAST_OPEN_DIR, "");
-//            appConfig.writeProperties();
         }
     }
 }

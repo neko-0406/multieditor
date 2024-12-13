@@ -1,7 +1,10 @@
 package com.nekosuki.multieditor.components.treeview;
 
+import lombok.Getter;
+
 import java.io.File;
 
+@Getter
 public class FileItem {
     private final File file;
     private final FileType fileType;
@@ -13,14 +16,6 @@ public class FileItem {
 
     public String getFileName() {
         return file.getName();
-    }
-
-    public FileType getFileType() {
-        return fileType;
-    }
-
-    public File getFile() {
-        return file;
     }
 
     @Override
