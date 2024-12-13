@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class SaveFileEvent implements EventHandler<ActionEvent> {
@@ -29,6 +30,12 @@ public class SaveFileEvent implements EventHandler<ActionEvent> {
             filePath = tTab.getFile().toPath();
             value = tTab.getCodeArea().getText();
             isEdited = tTab.isEdited();
+        }else return;
+
+        if (Files.exists(filePath)) {
+
+        }else {
+
         }
     }
 }
