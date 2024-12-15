@@ -5,4 +5,6 @@ import java.io.File;
 public interface ITextTab {
     File getFile();
     boolean isEdited();
+    void resetEdited();
+    String getValue();
 }

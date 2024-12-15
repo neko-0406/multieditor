@@ -2,19 +2,19 @@ package com.nekosuki.multieditor.components.tabs;
 
 import javafx.scene.control.Tab;
 import lombok.Getter;
+import lombok.Setter;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class TextTab extends Tab implements ITextTab {
     @Getter
     private final CodeArea codeArea;
+
+    @Setter
     private boolean isEdited;
 
     @Getter
@@ -52,8 +52,21 @@ public class TextTab extends Tab implements ITextTab {
             }
         });
     }
+
     @Override
     public boolean isEdited() {return isEdited;}
+
+    @Override
+    public String getValue() {
+        return this.codeArea.getText();
+    }
+
+    @Override
+    public void resetEdited() {
+        this.isEdited = false;
+        this.setGraphic(null);
+    }
+
 
     /**
      * コンストラクタで渡されたファイルを読み込み

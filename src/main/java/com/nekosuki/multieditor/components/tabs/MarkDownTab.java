@@ -28,6 +28,7 @@ public class MarkDownTab extends Tab implements ITextTab {
 
     @Getter
     private final File file;
+
     private boolean isEdited;
     private final static GenerateHTML generateHtml = new GenerateHTML();
 
@@ -62,6 +63,17 @@ public class MarkDownTab extends Tab implements ITextTab {
 
     @Override
     public boolean isEdited() {return isEdited;}
+
+    @Override
+    public void resetEdited() {
+        this.isEdited = false;
+        this.setGraphic(null);
+    }
+
+    @Override
+    public String getValue() {
+        return this.codeArea.getText();
+    }
 
     private void addEventListener() {
         codeArea.textProperty().addListener((observable, oldValue, newValue) -> {

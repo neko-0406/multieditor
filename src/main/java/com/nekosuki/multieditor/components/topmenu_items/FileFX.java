@@ -7,6 +7,7 @@ import com.nekosuki.multieditor.components.tabs.TextTab;
 import com.nekosuki.multieditor.process.file_menu.CloseDirectoryEvent;
 import com.nekosuki.multieditor.process.file_menu.CloseFileEvent;
 import com.nekosuki.multieditor.process.file_menu.OpenDirectoryEvent;
+import com.nekosuki.multieditor.process.file_menu.SaveFileEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.FileChooser;
@@ -51,10 +52,9 @@ public class FileFX extends Menu {
     }
 
     private MenuItem saveFile() {
-        MenuItem item = new MenuItem("保存");
+        MenuItem item = new MenuItem("ファイルを保存");
         item.setAccelerator(KeyCombination.valueOf("Ctrl+S"));
-        item.setOnAction(event -> {
-        });
+        item.setOnAction(new SaveFileEvent());
         return item;
     }
 
