@@ -64,22 +64,7 @@ public class FileFX extends Menu {
 
     private MenuItem newMarkDownFile() {
         MenuItem item = new MenuItem("新しいマークダウンファイル");
-        item.setOnAction(event -> {
-            TextInputDialog textInputDialog = new TextInputDialog();
-            textInputDialog.setHeaderText("ファイル名を入力");
-            textInputDialog.setContentText("ファイル名：");
-            textInputDialog.getDialogPane().setPrefWidth(300);
-            Optional<String> result = textInputDialog.showAndWait();
-            result.ifPresent(name -> {
-                MarkDownTab tab = new MarkDownTab();
-                String fileName = name;
-                if (!name.endsWith(".md") || !name.endsWith(".markdown")){
-                    fileName += ".md";
-                }
-                tab.setText(fileName);
-                MainApp.getComponents().getCustomTabPane().getTabs().add(tab);
-            });
-        });
+        item.setOnAction(new NewMarkdownFileEvent());
         return item;
     }
 
