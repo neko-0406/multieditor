@@ -70,18 +70,7 @@ public class FileFX extends Menu {
 
     private MenuItem newTextFile() {
         MenuItem item = new MenuItem("新しいテキストファイル");
-        item.setOnAction(event -> {
-            TextInputDialog textInputDialog = new TextInputDialog();
-            textInputDialog.setHeaderText("ファイル名を入力");
-            textInputDialog.setContentText("ファイル名：");
-            textInputDialog.getDialogPane().setPrefWidth(300);
-            Optional<String> result = textInputDialog.showAndWait();
-            result.ifPresent(name -> {
-                TextTab tab = new TextTab();
-                tab.setText(name);
-                MainApp.getComponents().getCustomTabPane().getTabs().add(tab);
-            });
-        });
+        item.setOnAction(new NewTextFileEvent());
         return item;
     }
 
