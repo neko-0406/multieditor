@@ -1,16 +1,8 @@
 package com.nekosuki.multieditor.components.topmenu_items;
 
-import com.nekosuki.multieditor.MainApp;
-import com.nekosuki.multieditor.components.tabs.FileType;
-import com.nekosuki.multieditor.components.tabs.MarkDownTab;
-import com.nekosuki.multieditor.components.tabs.TextTab;
 import com.nekosuki.multieditor.process.file_menu.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
-import javafx.stage.FileChooser;
-
-import java.io.File;
-import java.util.Optional;
 
 public class FileFX extends Menu {
 
