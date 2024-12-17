@@ -76,26 +76,7 @@ public class FileFX extends Menu {
 
     private MenuItem openFile() {
         MenuItem menuItem = new MenuItem("ファイルを開く");
-        menuItem.setOnAction(event -> {
-            FileChooser chooser = new FileChooser();
-            chooser.setInitialDirectory(new File(System.getProperty("user.home")));
-            chooser.setTitle("OpenFile");
-            File file = chooser.showOpenDialog(null);
-            if (file != null) {
-                String filetype = FileType.getFileType(file);
-                Tab tab;
-                if (filetype.equals(FileType.MARKDOWN)) {
-                    tab = new MarkDownTab(file);
-                }
-                else if (filetype.equals(FileType.TEXT)) {
-                    tab = new TextTab(file);
-                }
-                else {
-                    tab = new Tab();
-                }
-                MainApp.getComponents().getCustomTabPane().getTabs().add(tab);
-            }
-        });
+        menuItem.setOnAction(new OpenFileEvent());
         return menuItem;
     }
 }
