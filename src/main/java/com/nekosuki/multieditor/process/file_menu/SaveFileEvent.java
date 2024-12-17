@@ -3,8 +3,6 @@ package com.nekosuki.multieditor.process.file_menu;
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.CustomTabPane;
 import com.nekosuki.multieditor.components.tabs.ITextTab;
-import com.nekosuki.multieditor.components.tabs.MarkDownTab;
-import com.nekosuki.multieditor.components.tabs.TextTab;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
@@ -12,7 +10,6 @@ import javafx.stage.DirectoryChooser;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class SaveFileEvent implements EventHandler<ActionEvent> {
