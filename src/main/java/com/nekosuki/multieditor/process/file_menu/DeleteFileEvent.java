@@ -2,6 +2,7 @@ package com.nekosuki.multieditor.process.file_menu;
 
 import com.nekosuki.multieditor.MainApp;
 import com.nekosuki.multieditor.components.treeview.FileItem;
+import com.nekosuki.multieditor.components.treeview.FileType;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -42,29 +43,26 @@ public class DeleteFileEvent implements EventHandler<ActionEvent> {
         alert.setContentText(content.toString());
         Optional<ButtonType> option = alert.showAndWait();
 
-        option.ifPresent(action -> {
-            if (action.getButtonData().isCancelButton()) return;
+//        ButtonType [text=OK, buttonData=OK_DONE]
+//        ButtonType [text=取消, buttonData=CANCEL_CLOSE]
+        if (option.isPresent()) {
+            if (option.get().getButtonData().equals(ButtonBar.ButtonData.OK_DONE)){
+                for (var item : items) {
+                    FileType fileType = item.getValue().getFileType();
+                    if (fileType == FileType.FOLDER) {
+                        Alert dirAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                        dirAlert.setTitle("ファイルを削除");
+                        dirAlert.setHeaderText("アイテムにフォルダが含まれています。すべて削除しますか？");
+                        Optional<ButtonType> dirOption = dirAlert.showAndWait();
 
-            // 指定アイテムにフォルダが無いか確認
-            boolean isAccept = false;
-            for (var item : items) {
-                File file = item.getValue().getFile();
-                if (file.exists()) {
-                    if (file.isDirectory()) {
-                        Alert removeAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                        removeAlert.setHeaderText("ファイルを削除");
-                        removeAlert.setContentText("指定アイテムにフォルダがありますが、すべて削除しますか？");
-                        Optional<ButtonType> removeOption = removeAlert.showAndWait();
-                        removeOption.ifPresent(result -> {
-                            ButtonBar.ButtonData resultButton = result.getButtonData();
-                            if (!resultButton.isCancelButton()) {
+                        dirOption.ifPresent(result -> {
 
-                            }
                         });
                     }
                 }
             }
-        });
+            else {}
+        }
 
     }
 }
