@@ -12,16 +12,18 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TreeItem;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DeleteFileEvent implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
         ObservableList<TreeItem<FileItem>> items;
-        Alert alert = null;
+        Alert alert;
         items = MainApp.getComponents().getCustomTreeView().getSelectionModel().getSelectedItems();
 
         if (items.isEmpty()) {
@@ -39,30 +41,54 @@ public class DeleteFileEvent implements EventHandler<ActionEvent> {
 
         alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("ファイルを削除");
-        alert.setHeaderText("以下のファイルを完全に削除します。よろしいですか？");
+        alert.setHeaderText("以下のアイテムを完全に削除します。よろしいですか？");
         alert.setContentText(content.toString());
         Optional<ButtonType> option = alert.showAndWait();
 
 //        ButtonType [text=OK, buttonData=OK_DONE]
 //        ButtonType [text=取消, buttonData=CANCEL_CLOSE]
         if (option.isPresent()) {
-            if (option.get().getButtonData().equals(ButtonBar.ButtonData.OK_DONE)){
-                for (var item : items) {
-                    FileType fileType = item.getValue().getFileType();
-                    if (fileType == FileType.FOLDER) {
-                        Alert dirAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                        dirAlert.setTitle("ファイルを削除");
-                        dirAlert.setHeaderText("アイテムにフォルダが含まれています。すべて削除しますか？");
-                        Optional<ButtonType> dirOption = dirAlert.showAndWait();
+            if (option.get().getButtonData().equals(ButtonBar.ButtonData.OK_DONE)) {
+                try{
+                    for (var item : items) {
+                        Path path = item.getValue().getFile().toPath();
+                        if (Files.isDirectory(path)) {
+                            walkDeleteDirectory(path.toFile());
+                            Files.delete(path);
+                        }
+                        else {
+                            Files.delete(path);
+                        }
 
-                        dirOption.ifPresent(result -> {
+                    }
+                }catch (IOException e) {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("ファイルを削除");
+                    alert.setHeaderText("ファイルの削除に失敗しました");
+                    alert.showAndWait();
+                    throw new RuntimeException(e.getMessage());
+                }
+            }
+        }
+    }
 
-                        });
+    private void walkDeleteDirectory(File directory) throws IOException {
+        File[] files;
+        files = directory.listFiles();
+
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory()) {
+                    walkDeleteDirectory(f);
+                }
+                else {
+                    boolean isSuccess = f.delete();
+                    if (!isSuccess) {
+
+                        throw new IOException("failed to remove file...");
                     }
                 }
             }
-            else {}
         }
-
     }
 }

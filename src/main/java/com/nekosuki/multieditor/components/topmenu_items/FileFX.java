@@ -13,6 +13,7 @@ public class FileFX extends Menu {
             openFile(),
             newTextFile(),
             newMarkDownFile(),
+            newDirectory(),
             saveFile(),
             saveFileAs(),
             closeFile(),
@@ -21,6 +22,12 @@ public class FileFX extends Menu {
             openDir(),
             closeDir()
         );
+    }
+
+    private @NotNull MenuItem newDirectory() {
+        MenuItem item = new MenuItem("新しいフォルダ");
+        item.setOnAction(new NewDirectoryEvent());
+        return item;
     }
 
     private @NotNull MenuItem deleteFiles() {
